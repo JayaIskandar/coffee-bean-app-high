@@ -1,11 +1,22 @@
+import os
 import streamlit as st
 from ultralytics import YOLO
 from PIL import Image
 import cv2
 import numpy as np
 
+# Set the working directory to the script's directory
+base_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_dir, 'best.pt')
+
+# Debugging: Check if the file exists
+if os.path.exists(model_path):
+    st.write(f"File found at {model_path}")
+else:
+    st.write(f"File not found at {model_path}")
+
 # Load the YOLOv8 model
-model = YOLO("best.pt")
+model = YOLO(model_path)
 
 # Confidence threshold for considering the detected object as a coffee bean
 CONFIDENCE_THRESHOLD = 0.5
