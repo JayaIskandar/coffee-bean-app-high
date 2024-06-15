@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 # Load the YOLOv8 model
-model = YOLO("D:\\CODING\\SEMESTER 6\\NLU\\coffee-bean-app-high\\best.pt")
+model = YOLO("best.pt")
 
 # Confidence threshold for considering the detected object as a coffee bean
 CONFIDENCE_THRESHOLD = 0.5
