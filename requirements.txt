@@ -3,3 +3,4 @@ ultralytics
 Pillow
 opencv-python
 numpy
+streamlit-option-menu
