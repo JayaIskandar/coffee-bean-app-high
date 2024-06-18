@@ -162,12 +162,13 @@ def show_predict_page():
                     media_stream_constraints={"video": True, "audio": False}
                 )
             else:
-                st.write("Camera is only available to be used on a phone or small screen.")
+                st.write("Camera is only available to be used on a phone.")
         except ValueError:
-            st.write("Failed to get screen width.")
-
+            st.error("Error retrieving screen width.")
+            st.write(screen_width)
+            
     # Print screen_width to browser console
     st_javascript("console.log('Screen Width:', window.innerWidth);")
-
+    
 if __name__ == "__main__":
     show_predict_page()
