@@ -32,3 +32,8 @@
 }
 
 
+.stImage img {
+    border-radius: 50px; /* Adjust the value to change the roundness of the corners */
+}
+
+

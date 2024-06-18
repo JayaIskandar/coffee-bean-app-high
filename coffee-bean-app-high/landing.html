@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        .landing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            text-align: center;
+        }
+        .landing-container h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .landing-container p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+        .landing-container .start-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .landing-container .start-button:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <h1>Welcome to Coffee Bean Predictor</h1>
+        <p>Select a menu item to get started</p>
+        <button class="start-button" onclick="window.location.href='/#Menu'">Get Started</button>
+    </div>
+</body>
+</html>
