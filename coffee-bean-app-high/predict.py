@@ -5,7 +5,6 @@ from PIL import Image
 import cv2
 import numpy as np
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
-from user_agents import parse
 from streamlit_javascript import st_javascript
 
 # Set the working directory to the script's directory
@@ -101,10 +100,6 @@ class VideoTransformer(VideoTransformerBase):
 
         return img
 
-def is_mobile(user_agent):
-    parsed_user_agent = parse(user_agent)
-    return parsed_user_agent.is_mobile or parsed_user_agent.is_tablet
-
 def show_predict_page():
     st.markdown("<div class='upload-section'>Upload an image or use the webcam...</div>", unsafe_allow_html=True)
 
@@ -152,20 +147,27 @@ def show_predict_page():
             st.warning("This is not a coffee bean image.")
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown("<div class='upload-section'>Or use the webcam...</div>", unsafe_allow_html=True)
 
-    user_agent = st_javascript("return navigator.userAgent;")
+    screen_width = st_javascript("window.innerWidth")
 
-    if user_agent:
-        if is_mobile(user_agent):
-            webrtc_ctx = webrtc_streamer(
-                key="example", 
-                mode=WebRtcMode.SENDRECV, 
-                video_transformer_factory=VideoTransformer, 
-                media_stream_constraints={"video": True, "audio": False}
-            )
-        else:
-            st.write("Camera is only available to be used on a phone.")
+    if screen_width:
+        try:
+            screen_width = int(screen_width)
+            if screen_width < 576:
+                st.markdown("<div class='webcam-section'>Or use the webcam...</div>", unsafe_allow_html=True)
+                webrtc_ctx = webrtc_streamer(
+                    key="example", 
+                    mode=WebRtcMode.SENDRECV, 
+                    video_transformer_factory=VideoTransformer, 
+                    media_stream_constraints={"video": True, "audio": False}
+                )
+            else:
+                st.write("Camera is only available to be used on a phone or small screen.")
+        except ValueError:
+            st.write("Failed to get screen width.")
+
+    # Print screen_width to browser console
+    st_javascript("console.log('Screen Width:', window.innerWidth);")
 
 if __name__ == "__main__":
     show_predict_page()
