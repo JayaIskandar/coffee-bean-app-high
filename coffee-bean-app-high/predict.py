@@ -5,7 +5,6 @@ from PIL import Image
 import cv2
 import numpy as np
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
-from streamlit_javascript import st_javascript
 
 # Set the working directory to the script's directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,7 +40,15 @@ CONFIDENCE_THRESHOLD = 0.5
 def load_image(image_file):
     img = Image.open(image_file)
     img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)  # Convert PIL image to OpenCV format
-    img = resize_with_padding(img, 300, 300, (128, 128, 128), scale_factor=0.25)  # Resize and pad the image to 300x300 with gray background
+
+    # Calculate target size and padding color
+    target_width = 300
+    target_height = 300
+    pad_color = (128, 128, 128)  # Gray color padding
+
+    # Resize and pad the image
+    img = resize_with_padding(img, target_width, target_height, pad_color, scale_factor=0.25)
+
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert back to RGB format
     return img
 
@@ -147,28 +154,9 @@ def show_predict_page():
             st.warning("This is not a coffee bean image.")
 
     st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<div class='upload-section'>Or use the webcam...</div>", unsafe_allow_html=True)
 
-    screen_width = st_javascript("window.innerWidth")
+    webrtc_ctx = webrtc_streamer(key="example", mode=WebRtcMode.SENDRECV, video_transformer_factory=VideoTransformer, media_stream_constraints={"video": True, "audio": False})
 
-    if screen_width:
-        try:
-            screen_width = int(screen_width)
-            if screen_width < 576:
-                st.markdown("<div class='webcam-section'>Or use the webcam...</div>", unsafe_allow_html=True)
-                webrtc_ctx = webrtc_streamer(
-                    key="example", 
-                    mode=WebRtcMode.SENDRECV, 
-                    video_transformer_factory=VideoTransformer, 
-                    media_stream_constraints={"video": True, "audio": False}
-                )
-            else:
-                st.write("Camera is only available to be used on a phone.")
-        except ValueError:
-            st.error("Error retrieving screen width.")
-            st.write(screen_width)
-            
-    # Print screen_width to browser console
-    st_javascript("console.log('Screen Width:', window.innerWidth);")
-    
 if __name__ == "__main__":
     show_predict_page()
