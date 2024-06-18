@@ -5,6 +5,8 @@ from PIL import Image
 import cv2
 import numpy as np
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
+from user_agents import parse
+from streamlit_javascript import st_javascript
 
 # Set the working directory to the script's directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -40,8 +42,39 @@ CONFIDENCE_THRESHOLD = 0.5
 def load_image(image_file):
     img = Image.open(image_file)
     img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)  # Convert PIL image to OpenCV format
+    img = resize_with_padding(img, 300, 300, (128, 128, 128), scale_factor=0.25)  # Resize and pad the image to 300x300 with gray background
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert back to RGB format
     return img
+
+def resize_with_padding(img, target_width, target_height, pad_color=(255, 255, 255), scale_factor=1.0):
+    # Get the image dimensions
+    height, width = img.shape[:2]
+
+    # Calculate the aspect ratio
+    aspect_ratio = width / height
+
+    # Calculate the new dimensions while maintaining the aspect ratio
+    if aspect_ratio > 1:
+        new_width = int(target_width * scale_factor)
+        new_height = int(new_width / aspect_ratio)
+    else:
+        new_height = int(target_height * scale_factor)
+        new_width = int(new_height * aspect_ratio)
+
+    # Resize the image
+    resized_img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_AREA)
+
+    # Create a new image with the target dimensions and the specified padding color
+    padded_img = np.full((target_height, target_width, 3), pad_color, dtype=np.uint8)
+
+    # Calculate the offsets for centering the resized image
+    y_offset = (target_height - new_height) // 2
+    x_offset = (target_width - new_width) // 2
+
+    # Copy the resized image to the center of the padded image
+    padded_img[y_offset:y_offset + new_height, x_offset:x_offset + new_width] = resized_img
+
+    return padded_img
 
 def detect_objects(_img):
     results = model.predict(source=_img, save=False)
@@ -68,10 +101,9 @@ class VideoTransformer(VideoTransformerBase):
 
         return img
 
-def is_mobile():
-    user_agent = st.session_state.user_agent
-    mobile_keywords = ["Mobile", "Android", "iPhone", "iPad"]
-    return any(keyword in user_agent for keyword in mobile_keywords)
+def is_mobile(user_agent):
+    parsed_user_agent = parse(user_agent)
+    return parsed_user_agent.is_mobile or parsed_user_agent.is_tablet
 
 def show_predict_page():
     st.markdown("<div class='upload-section'>Upload an image or use the webcam...</div>", unsafe_allow_html=True)
@@ -122,18 +154,18 @@ def show_predict_page():
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<div class='upload-section'>Or use the webcam...</div>", unsafe_allow_html=True)
 
-    if 'user_agent' not in st.session_state:
-        st.session_state.user_agent = st.query_params.get("user_agent", [""])[0]
+    user_agent = st_javascript("return navigator.userAgent;")
 
-    if is_mobile():
-        webrtc_ctx = webrtc_streamer(
-            key="example", 
-            mode=WebRtcMode.SENDRECV, 
-            video_transformer_factory=VideoTransformer, 
-            media_stream_constraints={"video": True, "audio": False}
-        )
-    else:
-        st.write("Camera is only available to be used on a phone.")
+    if user_agent:
+        if is_mobile(user_agent):
+            webrtc_ctx = webrtc_streamer(
+                key="example", 
+                mode=WebRtcMode.SENDRECV, 
+                video_transformer_factory=VideoTransformer, 
+                media_stream_constraints={"video": True, "audio": False}
+            )
+        else:
+            st.write("Camera is only available to be used on a phone.")
 
 if __name__ == "__main__":
     show_predict_page()
