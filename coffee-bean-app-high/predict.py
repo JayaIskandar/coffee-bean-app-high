@@ -4,7 +4,7 @@ from ultralytics import YOLO
 from PIL import Image
 import cv2
 import numpy as np
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode
+from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode, RTCConfiguration
 
 # Set the working directory to the script's directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -156,7 +156,18 @@ def show_predict_page():
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown("<div class='upload-section'>Or use the webcam...</div>", unsafe_allow_html=True)
 
-    webrtc_ctx = webrtc_streamer(key="example", mode=WebRtcMode.SENDRECV, video_transformer_factory=VideoTransformer, media_stream_constraints={"video": True, "audio": False})
+    STUN_SERVER = "stun.l.google.com:19302"
+    RTC_CONFIGURATION = RTCConfiguration(
+        {"iceServers": [{"urls": ["stun:" + STUN_SERVER]}]}
+    )
+
+    webrtc_ctx = webrtc_streamer(
+        key="example",
+        mode=WebRtcMode.SENDRECV,
+        video_transformer_factory=VideoTransformer,
+        media_stream_constraints={"video": True, "audio": False},
+        rtc_configuration=RTC_CONFIGURATION,
+    )
 
 if __name__ == "__main__":
     show_predict_page()
