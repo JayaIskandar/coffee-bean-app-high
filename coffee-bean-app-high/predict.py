@@ -88,7 +88,7 @@ def detect_objects(_img):
 
 class VideoTransformer(VideoTransformerBase):
     def __init__(self):
-        self.model = YOLO(model_path)
+        self.model = YOLO(model_path)  # Initialize YOLO model here
 
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -96,14 +96,15 @@ class VideoTransformer(VideoTransformerBase):
         results = detect_objects(img)
         if results[0].boxes.data.tolist():  # Check if any objects were detected
             for result in results[0].boxes.data.tolist():
-                class_name = self.model.names[int(result[5])]
                 confidence = result[4]  # Confidence score
-                x1, y1, x2, y2 = int(result[0]), int(result[1]), int(result[2]), int(result[3])  # Bounding box coordinates
+                if confidence > 0.6:  # Adjust threshold as needed
+                    class_name = self.model.names[int(result[5])]
+                    x1, y1, x2, y2 = int(result[0]), int(result[1]), int(result[2]), int(result[3])  # Bounding box coordinates
 
-                # Draw bounding box and label on the image
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
-                label = f"{class_name} {confidence:.2f}"  # Label with class name and confidence score
-                cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
+                    # Draw bounding box and label on the image
+                    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
+                    label = f"{class_name} {confidence:.2f}"  # Label with class name and confidence score
+                    cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
 
         return img
 
@@ -161,10 +162,12 @@ def show_predict_page():
         {"iceServers": [{"urls": ["stun:" + STUN_SERVER]}]}
     )
 
+    video_transformer = VideoTransformer()  # Create VideoTransformer instance
+
     webrtc_ctx = webrtc_streamer(
         key="example",
         mode=WebRtcMode.SENDRECV,
-        video_transformer_factory=VideoTransformer,
+        video_transformer_factory=lambda: video_transformer,
         media_stream_constraints={"video": True, "audio": False},
         rtc_configuration=RTC_CONFIGURATION,
     )
