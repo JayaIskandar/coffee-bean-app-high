@@ -1,14 +1,19 @@
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
+from dotenv import load_dotenv
 import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Global Firestore client
 db = None
+firebase_initialized = False  # Flag to track if Firebase is already initialized
 
 def initialize_firebase():
-    global db
-    # Check if the app is already initialized
-    if not firebase_admin._apps:
+    global db, firebase_initialized
+    
+    if not firebase_initialized:
         # Load Firebase credentials from environment variables or configuration files
         firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
         if firebase_credentials_path:
@@ -16,6 +21,7 @@ def initialize_firebase():
             firebase_admin.initialize_app(cred)
             # Initialize Firestore
             db = firestore.client()
+            firebase_initialized = True  # Mark Firebase as initialized
         else:
             raise ValueError("Firebase credentials path not provided.")
     else:
@@ -48,7 +54,5 @@ def create_user_with_email_password(email, password):
         print(f"Error creating user: {e}")
         return None
 
-# Conditionally load environment variables from .env file only in local development
-if os.getenv('ENVIRONMENT') == 'development':
-    from dotenv import load_dotenv
-    load_dotenv()
+# Call initialize_firebase() once at the start of your application
+initialize_firebase()
