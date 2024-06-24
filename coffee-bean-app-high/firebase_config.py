@@ -1,10 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
-from dotenv import load_dotenv
 import os
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Global Firestore client
 db = None
@@ -51,3 +47,8 @@ def create_user_with_email_password(email, password):
     except Exception as e:
         print(f"Error creating user: {e}")
         return None
+
+# Conditionally load environment variables from .env file only in local development
+if os.getenv('ENVIRONMENT') == 'development':
+    from dotenv import load_dotenv
+    load_dotenv()
