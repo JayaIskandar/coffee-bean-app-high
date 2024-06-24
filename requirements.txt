@@ -7,3 +7,6 @@ streamlit-option-menu
 streamlit-webrtc
 streamlit_javascript
 user_agents
+dotenv
+firebase_config
+firebase_admin
