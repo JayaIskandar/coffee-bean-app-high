@@ -1,5 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
+from firebase_admin.auth import InvalidIdTokenError
 from dotenv import load_dotenv
 import os
 
@@ -31,7 +32,7 @@ def verify_id_token(id_token):
     try:
         decoded_token = auth.verify_id_token(id_token)
         return decoded_token
-    except Exception as e:
+    except InvalidIdTokenError as e:
         print(f"Error verifying ID token: {e}")
         return None
 
@@ -52,6 +53,16 @@ def create_user_with_email_password(email, password):
         return user
     except Exception as e:
         print(f"Error creating user: {e}")
+        return None
+
+def verify_user_with_email_password(email, password):
+    try:
+        user = auth.get_user_by_email(email)
+        if user:
+            # Implement password verification logic here
+            return user
+    except Exception as e:
+        print(f"Error verifying user: {e}")
         return None
 
 # Call initialize_firebase() once at the start of your application

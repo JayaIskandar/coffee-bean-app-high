@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from streamlit_option_menu import option_menu
 
-from firebase_config import initialize_firebase, create_user_with_email_password
+from firebase_config import initialize_firebase, create_user_with_email_password, verify_user_with_email_password
 
 # Load variables from .env file in local development
 if os.getenv('ENVIRONMENT') == 'development':
@@ -32,10 +32,12 @@ def show_sign_in_page():
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
         if st.button("Sign In"):
-            # Implement Firebase sign-in logic here
-            # Example logic to handle sign-in
-            # if successful:
-            st.session_state["authenticated"] = True
+            user = verify_user_with_email_password(email, password)
+            if user:
+                st.session_state["authenticated"] = True
+                st.rerun()
+            else:
+                st.error("Failed to sign in. Please check your credentials and try again.")
     else:
         st.error("Google Client ID not found. Please set the GOOGLE_CLIENT_ID environment variable.")
 
@@ -70,7 +72,7 @@ def load_html(file_name):
 # Function to handle logout
 def handle_logout():
     st.session_state["authenticated"] = False
-    st.rerun()
+    st.experimental_rerun()
     
 def main():
     css_path = os.path.join(os.path.dirname(__file__), 'style.css')
@@ -129,4 +131,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
