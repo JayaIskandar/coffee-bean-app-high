@@ -3,10 +3,10 @@ import os
 from streamlit_option_menu import option_menu
 from firebase_config import initialize_firebase, create_user_with_email_password, verify_user_with_email_password
 
-# Explicitly load the .env file
+# Explicitly load the .env file if running locally
 if os.path.exists('.env'):
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
 
 # Initialize Firebase SDK
 initialize_firebase()
