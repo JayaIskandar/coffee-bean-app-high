@@ -1,12 +1,16 @@
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_admin import credentials, auth, firestore
 from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
 load_dotenv()
 
+# Global Firestore client
+db = None
+
 def initialize_firebase():
+    global db
     # Check if the app is already initialized
     if not firebase_admin._apps:
         # Load Firebase credentials from environment variables or configuration files
@@ -14,6 +18,8 @@ def initialize_firebase():
         if firebase_credentials_path:
             cred = credentials.Certificate(firebase_credentials_path)
             firebase_admin.initialize_app(cred)
+            # Initialize Firestore
+            db = firestore.client()
         else:
             raise ValueError("Firebase credentials path not provided.")
     else:
@@ -27,17 +33,20 @@ def verify_id_token(id_token):
         print(f"Error verifying ID token: {e}")
         return None
 
-def send_verification_email(user):
-    try:
-        auth.send_email_verification(user.uid)
-        print("Verification email sent.")
-    except Exception as e:
-        print(f"Error sending verification email: {e}")
-
 def create_user_with_email_password(email, password):
     try:
         user = auth.create_user(email=email, password=password)
-        send_verification_email(user)
+        # Store user details in Firestore (including createdAt timestamp if not set)
+        user_ref = db.collection("users").document(user.uid)
+        user_data = {
+            "email": email,
+            "uid": user.uid,
+        }
+        # Check if 'createdAt' field exists, and set it only if it doesn't
+        if "createdAt" not in user_data:
+            user_data["createdAt"] = firestore.SERVER_TIMESTAMP
+        
+        user_ref.set(user_data, merge=True)  # Merge with existing data if any
         return user
     except Exception as e:
         print(f"Error creating user: {e}")
