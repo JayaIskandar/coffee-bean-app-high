@@ -1,11 +1,10 @@
 import streamlit as st
 import os
 from streamlit_option_menu import option_menu
-
 from firebase_config import initialize_firebase, create_user_with_email_password, verify_user_with_email_password
 
-# Load variables from .env file in local development
-if os.getenv('ENVIRONMENT') == 'development':
+# Explicitly load the .env file
+if os.path.exists('.env'):
     from dotenv import load_dotenv
     load_dotenv()
 
@@ -13,10 +12,7 @@ if os.getenv('ENVIRONMENT') == 'development':
 initialize_firebase()
 
 # Determine the environment based on the URL
-if "localhost" in os.getenv("BASE_URL_DEV", ""):
-    base_url = os.getenv("BASE_URL_DEV")
-else:
-    base_url = os.getenv("BASE_URL_PROD")
+base_url = os.getenv("BASE_URL_DEV") if os.getenv("ENVIRONMENT") == 'development' else os.getenv("BASE_URL_PROD")
 
 # Define base directory where HTML files are located
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -54,7 +50,6 @@ def show_register_page():
             else:
                 st.error("Failed to create user. Please try again.")
 
-################################################################
 # Load CSS
 def load_css(file_name):
     with open(file_name) as f:
@@ -67,13 +62,11 @@ def load_html(file_name):
         html_content = f.read()
     return html_content
 
-################################################################
-
 # Function to handle logout
 def handle_logout():
     st.session_state["authenticated"] = False
     st.experimental_rerun()
-    
+
 def main():
     css_path = os.path.join(os.path.dirname(__file__), 'style.css')
     load_css(css_path)  # Load CSS
@@ -98,11 +91,6 @@ def main():
                 menu_icon="cast",
                 default_index=0,
             )
-        
-        # 2. horizontal menu
-        #selected2 = option_menu(None, ["Home", "Upload", "Tasks", 'Settings'], 
-        #    icons=['house', 'cloud-upload', "list-task", 'gear'], 
-        #    menu_icon="cast", default_index=0, orientation="horizontal")
         
         if selected == "Home":
             st.markdown(load_html("landing.html"), unsafe_allow_html=True)

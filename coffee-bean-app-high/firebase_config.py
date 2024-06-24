@@ -1,11 +1,17 @@
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from firebase_admin.auth import InvalidIdTokenError
-from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
-load_dotenv()
+# Explicitly load the .env file
+if os.path.exists('.env'):
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
+    print("Loaded .env file")
+
+# Print the environment variables for debugging purposes
+print("ENVIRONMENT:", os.getenv('ENVIRONMENT'))
+print("FIREBASE_CREDENTIALS_PATH:", os.getenv('FIREBASE_CREDENTIALS_PATH'))
 
 # Global Firestore client
 db = None
@@ -18,6 +24,7 @@ def initialize_firebase():
         # Load Firebase credentials from environment variables or configuration files
         firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
         if firebase_credentials_path:
+            print(f"Firebase credentials path: {firebase_credentials_path}")
             cred = credentials.Certificate(firebase_credentials_path)
             firebase_admin.initialize_app(cred)
             # Initialize Firestore
