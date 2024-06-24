@@ -1,11 +1,13 @@
 import streamlit as st
 import os
 from streamlit_option_menu import option_menu
-from dotenv import load_dotenv
+
 from firebase_config import initialize_firebase, create_user_with_email_password
 
-# Load environment variables from .env file
-load_dotenv()
+# Load variables from .env file in local development
+if os.getenv('ENVIRONMENT') == 'development':
+    from dotenv import load_dotenv
+    load_dotenv()
 
 # Initialize Firebase SDK
 initialize_firebase()
