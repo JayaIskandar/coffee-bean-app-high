@@ -4,16 +4,6 @@ from firebase_admin.auth import InvalidIdTokenError
 import os
 import json
 
-# Load environment variables from .env file in local development
-if os.getenv('ENVIRONMENT') == 'development':
-    from dotenv import load_dotenv
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
-
-# Print the environment variables for debugging purposes
-print("ENVIRONMENT:", os.getenv('ENVIRONMENT'))
-print("FIREBASE_CREDENTIALS_PATH:", os.getenv('FIREBASE_CREDENTIALS_PATH'))
-
-
 # Function to construct Firebase credentials from environment variables
 def get_firebase_credentials_from_env():
     private_key = os.getenv("FIREBASE_PRIVATE_KEY")
@@ -36,9 +26,6 @@ def get_firebase_credentials_from_env():
         "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
     }
 
-
-print("FIREBASE_PRIVATE_KEY:", os.getenv('FIREBASE_PRIVATE_KEY'))
-
 # Global Firestore client
 db = None
 firebase_initialized = False  # Flag to track if Firebase is already initialized
@@ -50,16 +37,17 @@ def initialize_firebase():
         try:
             # Try to get the default app, if it exists
             firebase_admin.get_app()
-            firebase_initialized = True
         except ValueError:
             # If the default app doesn't exist, initialize it using credentials from environment variables
             firebase_credentials = get_firebase_credentials_from_env()
             cred = credentials.Certificate(firebase_credentials)
             
             firebase_admin.initialize_app(cred)
-            # Initialize Firestore
-            db = firestore.client()
-            firebase_initialized = True  # Mark Firebase as initialized
+        
+        # Initialize Firestore
+        db = firestore.client()
+        firebase_initialized = True  # Mark Firebase as initialized
+        print("Firebase initialized successfully.")
     else:
         print("Firebase app already initialized.")
 
@@ -73,6 +61,11 @@ def verify_id_token(id_token):
 
 def create_user_with_email_password(email, password):
     try:
+        global db
+        
+        if db is None:
+            initialize_firebase()  # Initialize Firebase if not already initialized
+        
         user = auth.create_user(email=email, password=password)
         # Store user details in Firestore (including createdAt timestamp if not set)
         user_ref = db.collection("users").document(user.uid)
@@ -92,6 +85,11 @@ def create_user_with_email_password(email, password):
 
 def verify_user_with_email_password(email, password):
     try:
+        global db
+        
+        if db is None:
+            initialize_firebase()  # Initialize Firebase if not already initialized
+        
         user = auth.get_user_by_email(email)
         if user:
             # Implement password verification logic here
