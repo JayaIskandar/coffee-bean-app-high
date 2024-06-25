@@ -4,15 +4,40 @@ from firebase_admin.auth import InvalidIdTokenError
 import os
 import json
 
-# Explicitly load the .env file if running locally
-if os.path.exists('.env'):
+# Load environment variables from .env file in local development
+if os.getenv('ENVIRONMENT') == 'development':
     from dotenv import load_dotenv
     load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
-    print("Loaded .env file")
 
 # Print the environment variables for debugging purposes
 print("ENVIRONMENT:", os.getenv('ENVIRONMENT'))
 print("FIREBASE_CREDENTIALS_PATH:", os.getenv('FIREBASE_CREDENTIALS_PATH'))
+
+
+# Function to construct Firebase credentials from environment variables
+def get_firebase_credentials_from_env():
+    private_key = os.getenv("FIREBASE_PRIVATE_KEY")
+    if private_key is None:
+        raise ValueError("FIREBASE_PRIVATE_KEY environment variable is not set.")
+    
+    print("Loaded FIREBASE_PRIVATE_KEY:", private_key)  # Debug print
+    
+    return {
+        "type": os.getenv("FIREBASE_TYPE", "service_account"),
+        "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+        "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+        "private_key": private_key.replace("\\n", "\n"),
+        "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+        "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+        "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
+        "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
+        "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_X509_CERT_URL"),
+        "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_X509_CERT_URL"),
+        "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
+    }
+
+
+print("FIREBASE_PRIVATE_KEY:", os.getenv('FIREBASE_PRIVATE_KEY'))
 
 # Global Firestore client
 db = None
@@ -22,23 +47,19 @@ def initialize_firebase():
     global db, firebase_initialized
     
     if not firebase_initialized:
-        # Load Firebase credentials from environment variables or configuration files
-        firebase_credentials_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
-        if firebase_credentials_path:
-            try:
-                # Try to load the credentials as a JSON string
-                credentials_json = json.loads(firebase_credentials_path)
-                cred = credentials.Certificate(credentials_json)
-            except json.JSONDecodeError:
-                # Fallback: assume it is a file path
-                cred = credentials.Certificate(firebase_credentials_path)
-                
+        try:
+            # Try to get the default app, if it exists
+            firebase_admin.get_app()
+            firebase_initialized = True
+        except ValueError:
+            # If the default app doesn't exist, initialize it using credentials from environment variables
+            firebase_credentials = get_firebase_credentials_from_env()
+            cred = credentials.Certificate(firebase_credentials)
+            
             firebase_admin.initialize_app(cred)
             # Initialize Firestore
             db = firestore.client()
             firebase_initialized = True  # Mark Firebase as initialized
-        else:
-            raise ValueError("Firebase credentials path not provided.")
     else:
         print("Firebase app already initialized.")
 
