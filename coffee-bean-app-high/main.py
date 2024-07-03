@@ -30,7 +30,11 @@ def show_sign_in_page():
         if st.button("Sign In"):
             user = verify_user_with_email_password(email, password)
             if user:
+                st.session_state["user_id"] = user.uid  # Store user ID in session state
                 st.session_state["authenticated"] = True
+                # Update URL to remove any previous query parameters and set authenticated to true
+                st.query_params.clear()
+                st.query_params["authenticated"] = "true"
                 st.rerun()
             else:
                 st.error("Failed to sign in. Please check your credentials and try again.")
@@ -64,15 +68,27 @@ def load_html(file_name):
 
 # Function to handle logout
 def handle_logout():
+    st.session_state["user_id"] = None
     st.session_state["authenticated"] = False
-    st.experimental_rerun()
+    st.query_params()
+    st.rerun()
+
+def show_menu():
+    with st.sidebar:
+        return option_menu(
+            "Menu",
+            ["Home", "Predict", "Game", "Edu Blog", "Flavor Wheel", "My Account", "Logout"],
+            icons=["house", "camera", "controller", "book", "circle", "person", "door-open"],
+            menu_icon="cast",
+            default_index=0,
+        )
 
 def main():
     css_path = os.path.join(os.path.dirname(__file__), 'style.css')
     load_css(css_path)  # Load CSS
 
     if "authenticated" not in st.session_state:
-        st.session_state["authenticated"] = False
+        st.session_state["authenticated"] = st.query_params.get("authenticated") == "true"
 
     if not st.session_state["authenticated"]:
         option = st.sidebar.selectbox("Select Option", ["Sign In", "Register"])
@@ -82,17 +98,18 @@ def main():
             show_register_page()
     else:
         st.sidebar.write("Authenticated User Menu")
-        # Create the navigation menu
-        with st.sidebar:
-            selected = option_menu(
-                "Menu",
-                ["Home", "Predict", "Game", "Edu Blog", "Flavor Wheel", "My Account", "Logout"],
-                icons=["house", "camera", "controller", "book", "circle", "person", "door-open"],
-                menu_icon="cast",
-                default_index=0,
-            )
         
-        if selected == "Home":
+        # Always show the menu for authenticated users
+        selected = show_menu()
+        
+        # Check if a specific page is requested in the URL
+        requested_page = st.query_params.get("page", None)
+        
+        if requested_page == "edu_blog":
+            st.markdown(load_html("edu_blog.html"), unsafe_allow_html=True)
+            import edu_blog
+            edu_blog.show_edu_blog_page()
+        elif selected == "Home":
             st.markdown(load_html("landing.html"), unsafe_allow_html=True)
         elif selected == "Predict":
             st.markdown(load_html("predict.html"), unsafe_allow_html=True)
