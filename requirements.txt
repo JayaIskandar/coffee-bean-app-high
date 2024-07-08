@@ -8,3 +8,4 @@ streamlit-webrtc
 streamlit_javascript
 user_agents
 firebase_admin
+google_auth_oauthlib
