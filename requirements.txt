@@ -9,3 +9,6 @@ streamlit_javascript
 user_agents
 firebase_admin
 google_auth_oauthlib
+google.oauth2
+google.auth.transport
+google_auth_oauthlib.flow
