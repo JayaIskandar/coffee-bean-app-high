@@ -1,7 +1,14 @@
 import streamlit as st
 import os
 from streamlit_option_menu import option_menu
-from firebase_config import initialize_firebase, create_user_with_email_password, verify_user_with_email_password
+from firebase_config import initialize_firebase, create_user_with_email_password, verify_user_with_email_password, db
+
+# IMPORT LIBRARIES FOR GOOGLE AUTHENTICATION
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from google_auth_oauthlib.flow import Flow
+from firebase_admin import auth, firestore
+import json
 
 # Explicitly load the .env file if running locally
 if os.path.exists('.env'):
@@ -17,13 +24,93 @@ base_url = os.getenv("BASE_URL_DEV") if os.getenv("ENVIRONMENT") == 'development
 # Define base directory where HTML files are located
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
+
+
+def exchange_code_for_token(code):
+    
+    # Ensure Firebase is initialized
+    if db is None:
+        initialize_firebase()
+        
+    # Set up the OAuth 2.0 flow using environment variables and base_url
+    flow = Flow.from_client_config(
+        {
+            "web": {
+                "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+                "client_secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://oauth2.googleapis.com/token",
+            }
+        },
+        scopes=['openid', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile'],
+        redirect_uri=base_url
+    )
+    
+    # Exchange the authorization code for credentials
+    flow.fetch_token(code=code)
+    
+    # Get the ID token from the credentials
+    id_info = id_token.verify_oauth2_token(
+        flow.credentials.id_token, requests.Request(), os.getenv("GOOGLE_CLIENT_ID"),
+        clock_skew_in_seconds=10  # Allow a 10-second clock skew
+    )
+    
+    # Check if the token is valid
+    if id_info['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+        raise ValueError('Wrong issuer.')
+    
+    # Get or create the Firebase user
+    try:
+        firebase_user = auth.get_user_by_email(id_info['email'])
+    except auth.UserNotFoundError:
+        firebase_user = auth.create_user(
+            email=id_info['email'],
+            display_name=id_info.get('name'),
+            photo_url=id_info.get('picture')
+        )
+    
+    # Store user details in Firestore
+    user_ref = db.collection("users").document(firebase_user.uid)
+    user_data = {
+        "email": firebase_user.email,
+        "uid": firebase_user.uid,
+        "display_name": firebase_user.display_name,
+        "photo_url": firebase_user.photo_url,
+        "createdAt": firestore.SERVER_TIMESTAMP  # Add the createdAt timestamp
+    }
+    
+    user_ref.set(user_data, merge=True)  # Merge with existing data if any
+    
+    return {
+        "uid": firebase_user.uid,
+        "email": firebase_user.email,
+        "createdAt": firestore.SERVER_TIMESTAMP
+    }
+
+
+    
+    
 def show_sign_in_page():
     st.title("Sign In")
     provider = st.selectbox("Select Provider", ["Google", "Email/Password"])
     google_client_id = os.getenv("GOOGLE_CLIENT_ID")  # Retrieve Google Client ID from environment variable
     if provider == "Google" and google_client_id:
-        sign_in_url = f"https://accounts.google.com/o/oauth2/auth?client_id={google_client_id}&redirect_uri={base_url}&response_type=code&scope=email"
+        sign_in_url = f"https://accounts.google.com/o/oauth2/auth?client_id={google_client_id}&redirect_uri={base_url}&response_type=code&scope=openid%20email%20profile&access_type=offline"
         st.markdown(f'[Sign in with Google]({sign_in_url})', unsafe_allow_html=True)
+        
+        # Check if the user has returned from Google authentication
+        code = st.query_params.get("code")
+        if code:
+            try:
+                # Exchange the code for a token and get user info
+                user_info = exchange_code_for_token(code)
+                st.session_state["user_id"] = user_info["uid"]
+                st.session_state["authenticated"] = True
+                st.query_params.clear()
+                st.query_params["authenticated"] = "true"
+                st.rerun()
+            except Exception as e:
+                st.error(f"Failed to authenticate with Google: {str(e)}")
     elif provider == "Email/Password":
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
@@ -41,6 +128,7 @@ def show_sign_in_page():
     else:
         st.error("Google Client ID not found. Please set the GOOGLE_CLIENT_ID environment variable.")
 
+        
 def show_register_page():
     st.title("Register")
     email = st.text_input("Email")
