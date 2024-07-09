@@ -6,6 +6,11 @@ import cv2
 import numpy as np
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, WebRtcMode, RTCConfiguration
 
+from fpdf import FPDF
+from datetime import datetime
+from io import BytesIO
+import tempfile
+
 # Set the working directory to the script's directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(base_dir, 'best.pt')
@@ -108,6 +113,73 @@ class VideoTransformer(VideoTransformerBase):
 
         return img
 
+#################### FOR CREATING THE CONTENT OF PDF FILE ##################################
+def create_pdf(test_input_path, test_output_path, predicted_class, confidence):
+    class PDF(FPDF):
+        def header(self):
+            # Brown bar at the top
+            self.set_fill_color(139, 69, 19)  # Dark brown color
+            self.rect(0, 0, 210, 15, 'F')
+
+        def footer(self):
+            # Brown bar at the bottom
+            self.set_fill_color(139, 69, 19)  # Dark brown color
+            self.rect(0, 282, 210, 15, 'F')
+            self.set_y(-40)  # Move to the bottom of the page
+            self.set_font("Arial", 'I', size=8)
+            self.multi_cell(0, 10, "Disclaimer: This prediction is based on machine learning models and may not be 100% accurate.", align='C')
+        
+        
+    pdf = PDF()
+    pdf.add_page()
+
+
+    # Title
+    pdf.set_font("Arial", 'B', size=24)
+    pdf.set_text_color(139, 69, 19)  # Dark brown color
+    pdf.cell(200, 30, txt="BEANXPERT", ln=True, align='C')
+
+    # Test time
+    pdf.set_font("Arial", size=12)
+    pdf.set_text_color(0, 0, 0)  # Black color
+    test_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    pdf.cell(200, 10, txt=f"TEST TIME: {test_time}", ln=True, align='C')
+
+    # Test input and output photos
+    pdf.set_font("Arial", 'B', size=14)
+    image_width = 45  # 90 * 0.8 = 72
+    pdf.cell(95, 10, txt="TEST INPUT PHOTO:", ln=0, align='L')
+    pdf.cell(95, 10, txt="TEST OUTPUT PHOTO:", ln=1, align='R')
+    pdf.image(test_input_path, x=10, y=70, w=image_width)
+    pdf.image(test_output_path, x=150, y=70, w=image_width)
+
+    # Test result
+    pdf.ln(100)  # Move cursor down to avoid overlapping
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 10, f"TEST RESULT: This is a {predicted_class} coffee bean with confidence {confidence:.2f}", align='C')
+
+    # Signature
+    pdf.ln(10)
+    pdf.cell(140)  # Move to the right
+    pdf.set_font("Arial", size=10)
+    pdf.cell(0, 10, "Signed by BeanXpert", ln=True, align='R')
+
+    signature_path = os.path.join(base_dir, 'signature-bean.png')
+    pdf.image(signature_path, x=150, y=pdf.get_y(), w=50)  # Adjust width as needed
+
+    pdf.ln(30)
+    pdf.cell(0, 10, "Jaya Iskandar", ln=True, align='R')
+    pdf.cell(0, 10, "Founder of BeanXpert", ln=True, align='R')
+
+
+    # Save the PDF to a file
+    pdf_file = os.path.join(base_dir, 'prediction_result.pdf')
+    pdf.output(pdf_file)
+
+    return pdf_file
+#################### FOR CREATING THE CONTENT OF PDF FILE ##################################
+
+
 def show_predict_page():
     st.markdown("<div class='upload-section'>Upload an image or use the webcam...</div>", unsafe_allow_html=True)
 
@@ -151,6 +223,49 @@ def show_predict_page():
                 cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
 
             st.image(image, caption='Detected Objects', width=300)  # Display the image with bounding boxes and labels
+
+
+            ############ FOR PROCESSING INTO THE PDF FILE ##################
+            
+            # Save the images to temporary files
+            input_image = Image.open(uploaded_file)
+            if input_image.mode == 'RGBA':
+                input_image = input_image.convert('RGB')
+            input_image_tempfile = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+            input_image.save(input_image_tempfile.name)
+
+            output_image_tempfile = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+            output_image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))  # Convert image back to PIL format
+            output_image.save(output_image_tempfile.name)
+            
+            
+            # Create and download the PDF
+            pdf_file = create_pdf(input_image_tempfile.name, output_image_tempfile.name, predicted_class, max_confidence)
+            # Create two columns
+            col1, col2 = st.columns([1, 10])  # Adjust the ratio as needed
+
+            with col1:
+                # Display the PDF icon
+                pdf_icon = Image.open("pdf-icon-fix.png")
+                st.image(pdf_icon, width=70)  # Adjust the width as needed
+
+            with col2:
+                #Add some vertical space
+                st.markdown('<div style="margin-top: 20px;"></div>', unsafe_allow_html=True)
+                
+                # Download button
+                with open(pdf_file, "rb") as f:
+                    st.download_button(
+                        label="Download Official Prediction Results",
+                        data=f,
+                        file_name="prediction_result.pdf",
+                        mime="application/pdf"
+                    )
+                
+            ############ FOR PROCESSING INTO THE PDF FILE ##################
+            
+            
+            
         else:
             st.warning("This is not a coffee bean image.")
 
@@ -161,7 +276,7 @@ def show_predict_page():
     RTC_CONFIGURATION = RTCConfiguration(
         {"iceServers": [{"urls": ["stun:" + STUN_SERVER]}]}
     )
-
+    
     video_transformer = VideoTransformer()  # Create VideoTransformer instance
 
     webrtc_ctx = webrtc_streamer(
@@ -174,3 +289,5 @@ def show_predict_page():
 
 if __name__ == "__main__":
     show_predict_page()
+
+

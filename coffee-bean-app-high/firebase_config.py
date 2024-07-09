@@ -4,6 +4,7 @@ from firebase_admin.auth import InvalidIdTokenError
 import os
 import json
 
+
 # Function to construct Firebase credentials from environment variables
 def get_firebase_credentials_from_env():
     private_key = os.getenv("FIREBASE_PRIVATE_KEY")
@@ -97,6 +98,10 @@ def verify_user_with_email_password(email, password):
     except Exception as e:
         print(f"Error verifying user: {e}")
         return None
+
+
+
+
 
 # Call initialize_firebase() once at the start of your application
 initialize_firebase()

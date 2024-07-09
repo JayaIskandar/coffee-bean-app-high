@@ -193,7 +193,7 @@ def main():
         # Check if a specific page is requested in the URL
         requested_page = st.query_params.get("page", None)
         
-        if requested_page == "edu_blog":
+        if requested_page == ["edu_blog"] or selected == "Edu Blog":
             st.markdown(load_html("edu_blog.html"), unsafe_allow_html=True)
             import edu_blog
             edu_blog.show_edu_blog_page()
