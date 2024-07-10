@@ -10,3 +10,4 @@ user_agents
 firebase_admin
 google-auth
 google-auth-oauthlib
+fpdf
