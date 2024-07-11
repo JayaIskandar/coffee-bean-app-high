@@ -17,6 +17,8 @@ model_path = os.path.join(base_dir, 'best.pt')
 css_path = os.path.join(base_dir, 'style.css')
 html_path = os.path.join(base_dir, 'predict.html')
 
+pdf_icon_path = os.path.join(base_dir, 'pdf-icon-fix.png')
+
 # Load CSS
 def load_css(file_name):
     with open(file_name) as f:
@@ -246,8 +248,11 @@ def show_predict_page():
 
             with col1:
                 # Display the PDF icon
-                pdf_icon = Image.open("pdf-icon-fix.png")
-                st.image(pdf_icon, width=70)  # Adjust the width as needed
+                if os.path.exists(pdf_icon_path):
+                    pdf_icon = Image.open(pdf_icon_path)
+                    st.image(pdf_icon, width=70)
+                else:
+                    st.write("PDF icon not found")
 
             with col2:
                 #Add some vertical space
