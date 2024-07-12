@@ -35,7 +35,7 @@ def show_edu_blog_page():
                 <div style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 10px;">
                     <h3>{blog['title']}</h3>
                     <p>{blog['excerpt']}</p>
-                    <a href="?{urlencode({'blog': i, 'authenticated': 'true', 'page': 'edu_blog'})}">
+                    <a href="?{urlencode({'blog': i, 'authenticated': 'true', 'page': 'edu_blog'})}", target="_self">
                         <button>Read More</button>
                     </a>
                 </div>
