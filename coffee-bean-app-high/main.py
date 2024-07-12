@@ -161,16 +161,24 @@ def handle_logout():
     st.query_params()
     st.rerun()
 
-def show_menu():
+def show_menu(default_index=0):
     with st.sidebar:
         return option_menu(
             "Menu",
             ["Home", "Predict", "Game", "Edu Blog", "Flavor Wheel", "My Account", "Logout"],
             icons=["house", "camera", "controller", "book", "circle", "person", "door-open"],
             menu_icon="cast",
-            default_index=0,
+            default_index=default_index,
+            key="main_menu"  # Add this line
         )
 
+
+#FUNCTION FOR EDU BLOG 
+def show_blog_article():
+    import edu_blog
+    edu_blog.show_edu_blog_page()
+    
+    
 def main():
     css_path = os.path.join(os.path.dirname(__file__), 'style.css')
     load_css(css_path)  # Load CSS
@@ -178,7 +186,13 @@ def main():
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = st.query_params.get("authenticated") == "true"
 
-    if not st.session_state["authenticated"]:
+    # Check if a specific blog is requested
+    blog_index = st.query_params.get("blog")
+    
+    if blog_index is not None:
+        # If a specific blog is requested, show only the blog article without sidebar
+        show_blog_article()
+    elif not st.session_state["authenticated"]:
         option = st.sidebar.selectbox("Select Option", ["Sign In", "Register"])
         if option == "Sign In":
             show_sign_in_page()
@@ -187,18 +201,23 @@ def main():
     else:
         st.sidebar.write("Authenticated User Menu")
         
-        # Always show the menu for authenticated users
-        selected = show_menu()
-        
         # Check if a specific page is requested in the URL
         requested_page = st.query_params.get("page", None)
         
-        if requested_page == ["edu_blog"] or selected == "Edu Blog":
+        # Set the default index for the menu
+        default_index = 0
+        if requested_page == "edu_blog":
+            default_index = 3  # Index of "Edu Blog" in the menu list
+        
+        # Show the menu with the correct default index
+        selected = show_menu(default_index)
+        
+        if requested_page == "edu_blog" or selected == "Edu Blog":
             st.markdown(load_html("edu_blog.html"), unsafe_allow_html=True)
             import edu_blog
             edu_blog.show_edu_blog_page()
         elif selected == "Home":
-            st.markdown(load_html("landing.html"), unsafe_allow_html=True)
+            st.markdown(load_html("dashboard.html"), unsafe_allow_html=True)
         elif selected == "Predict":
             st.markdown(load_html("predict.html"), unsafe_allow_html=True)
             import predict
@@ -207,10 +226,6 @@ def main():
             st.markdown(load_html("game.html"), unsafe_allow_html=True)
             import game
             game.show_game_page()
-        elif selected == "Edu Blog":
-            st.markdown(load_html("edu_blog.html"), unsafe_allow_html=True)
-            import edu_blog
-            edu_blog.show_edu_blog_page()
         elif selected == "Flavor Wheel":
             st.markdown(load_html("flavor_wheel.html"), unsafe_allow_html=True)
             import flavor_wheel
@@ -221,6 +236,12 @@ def main():
             my_account.show_my_account_page()
         elif selected == "Logout":
             handle_logout()
+        else:
+            # Default to Home if no valid selection
+            st.markdown(load_html("dashboard.html"), unsafe_allow_html=True)
+    
+    # Don't clear the 'page' query parameter here
+    # This allows the 'edu_blog' page to persist when "Read More" is clicked
 
 if __name__ == "__main__":
     main()
