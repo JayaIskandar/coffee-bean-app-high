@@ -213,6 +213,8 @@ def main():
         selected = show_menu(default_index)
         
         if requested_page == "edu_blog" or selected == "Edu Blog":
+            if 'viewing_blog' in st.session_state:
+                st.session_state.viewing_blog = None
             st.markdown(load_html("edu_blog.html"), unsafe_allow_html=True)
             import edu_blog
             edu_blog.show_edu_blog_page()

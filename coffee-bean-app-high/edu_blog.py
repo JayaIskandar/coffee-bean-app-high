@@ -2,8 +2,17 @@ import streamlit as st
 from urllib.parse import urlencode
 
 def show_edu_blog_page():
+    
+    # Initialize session state for blog viewing
+    if 'viewing_blog' not in st.session_state:
+        st.session_state.viewing_blog = None
+
     # Get URL parameters to check if a specific blog is selected
     selected_blog_index = st.query_params.get("blog", None)
+
+    # Update session state if a blog is selected via URL
+    if selected_blog_index is not None:
+        st.session_state.viewing_blog = int(selected_blog_index)
 
     # Define blog posts
     blogs = [
@@ -48,6 +57,7 @@ def show_edu_blog_page():
             st.title(blog["title"])
             st.write(blog["content"])
             if st.button("Back to Home"):
+                st.session_state.viewing_blog = None
                 st.query_params.clear()
                 st.switch_page("main.py")
 
