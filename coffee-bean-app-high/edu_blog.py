@@ -47,11 +47,9 @@ def show_edu_blog_page():
             blog = blogs[selected_blog_index]
             st.title(blog["title"])
             st.write(blog["content"])
-            if st.button("Back to Blogs"):
+            if st.button("Back to Home"):
                 st.query_params.clear()
-                st.query_params["authenticated"] = "true"
-                st.query_params["page"] = "edu_blog"
-                st.rerun()
+                st.switch_page("main.py")
 
 # Call the function in main.py
 if __name__ == "__main__":
