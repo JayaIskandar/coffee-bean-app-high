@@ -7,6 +7,13 @@ def show_edu_blog_page():
     if 'viewing_blog' not in st.session_state:
         st.session_state.viewing_blog = None
 
+    # Check for a reset parameter
+    if st.query_params.get("reset") == "true":
+        st.session_state.viewing_blog = None
+        st.query_params.clear()
+        st.query_params(authenticated='true', page='edu_blog')
+        st.rerun()
+        
     # Get URL parameters to check if a specific blog is selected
     selected_blog_index = st.query_params.get("blog", None)
 
@@ -33,7 +40,7 @@ def show_edu_blog_page():
         }
     ]
 
-    if selected_blog_index is None:
+    if st.session_state.viewing_blog is None:
         st.title("Edu Blog Page")
         st.write("Welcome to the Edu Blog! Here you'll find interesting articles about coffee beans.")
         
@@ -51,9 +58,9 @@ def show_edu_blog_page():
                 """, unsafe_allow_html=True
             )
     else:
-        selected_blog_index = int(selected_blog_index)
-        if selected_blog_index < len(blogs):
-            blog = blogs[selected_blog_index]
+        if st.session_state.viewing_blog < len(blogs):
+            blog = blogs[st.session_state.viewing_blog]
+
             st.title(blog["title"])
             st.write(blog["content"])
             if st.button("Back to Home"):
