@@ -11,3 +11,4 @@ firebase_admin
 google-auth
 google-auth-oauthlib
 fpdf
+streamlit_js_eval
