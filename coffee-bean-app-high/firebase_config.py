@@ -4,6 +4,8 @@ from firebase_admin.auth import InvalidIdTokenError
 import os
 import json
 
+import streamlit as st
+
 
 # Function to construct Firebase credentials from environment variables
 def get_firebase_credentials_from_env():
@@ -79,6 +81,11 @@ def create_user_with_email_password(email, password):
             user_data["createdAt"] = firestore.SERVER_TIMESTAMP
         
         user_ref.set(user_data, merge=True)  # Merge with existing data if any
+        
+         # STORE USER UID IN SESSION STATE
+        st.session_state['user'] = user.uid
+        print(f"User UID stored in session state: {st.session_state['user']}")  # Debug print
+        
         return user
     except Exception as e:
         print(f"Error creating user: {e}")

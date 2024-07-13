@@ -3,6 +3,12 @@ from urllib.parse import urlencode
 
 from streamlit_js_eval import streamlit_js_eval
 
+from streamlit_star_rating import st_star_rating
+
+from firebase_config import db, auth  # Import your Firebase configuration
+from firebase_admin import credentials, auth, firestore
+
+
 def show_edu_blog_page():
     
     # Initialize session state for blog viewing
@@ -58,6 +64,41 @@ def show_edu_blog_page():
             blog = blogs[selected_blog_index]
             st.title(blog["title"])
             st.write(blog["content"])
+            
+            
+            # Custom CSS for rounded corners
+
+            
+            
+            # Add rating form
+            st.write("---")
+            st.subheader("Rate this article")
+            with st.form(key="rating_form"):
+                stars = st_star_rating(label = "How's this article?", maxValue = 5, defaultValue = 3, key = "rating", dark_theme = False)
+                comment = st.text_area("Your Comment")
+                submit_button = st.form_submit_button(label="Submit Rating")
+
+            if submit_button:
+                # Here you would typically save the rating and comment to a database
+                # Check if user is logged in (assume user_uid is stored in session state)
+                #if 'user' in st.session_state and 'uid' in st.session_state['user']:
+                    #user_uid = st.session_state['user']['uid']
+                    # Save feedback to Firestore
+                    feedback_ref = db.collection("feedbacks").document()
+                    feedback_data = {
+                        #"user_uid": user_uid,
+                        "blog_index": selected_blog_index,
+                        "rating": stars,
+                        "comment": comment,
+                        "createdAt": firestore.SERVER_TIMESTAMP
+                    }
+                    feedback_ref.set(feedback_data)
+                    st.success(f"Thank you for your rating of {stars} stars and your comment!")
+            else:
+                    st.error("Please log in to submit feedback.")
+            
+            
+            
             if st.button("Back to Home"):
                 st.session_state.viewing_blog = None
                 st.query_params.clear()
