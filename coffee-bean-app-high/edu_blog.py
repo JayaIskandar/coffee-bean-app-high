@@ -10,10 +10,13 @@ from firebase_admin import credentials, auth, firestore
 
 import os
 
+# Define base directory where HTML files are located
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
 # Function to read content from a text file
 def load_blog_content(filename):
     # Replace 'your_directory' with the actual directory where your files are stored
-    file_path = os.path.join("blog_contents", filename)
+    file_path = os.path.join(base_dir, filename)
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
