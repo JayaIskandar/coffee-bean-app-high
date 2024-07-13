@@ -9,6 +9,12 @@ from firebase_config import db, auth  # Import your Firebase configuration
 from firebase_admin import credentials, auth, firestore
 
 
+# Function to read content from a text file
+def load_blog_content(filename):
+    with open(filename, 'r', encoding='utf-8') as file:
+        return file.read()
+
+    
 def show_edu_blog_page():
     
     # Initialize session state for blog viewing
@@ -26,26 +32,27 @@ def show_edu_blog_page():
     blogs = [
         {
             "title": "Understanding Arabica Coffee Beans",
-            "excerpt": "Arabica coffee beans are known for their smooth, complex flavor profile...",
-            "content": "Arabica coffee beans are the most popular type of coffee beans in the world. They are grown in higher altitudes and are known for their smooth, complex flavor profile, with hints of sweetness and acidity. The beans are oval in shape with a curved crease on one side. Arabica coffee is often considered to have a more delicate and nuanced flavor compared to Robusta coffee."
+            "excerpt": "If you’re a coffee lover, chances are you’ve encountered Arabica coffee beans...",
+            "content": load_blog_content("arabica_blog.txt")
         },
         {
             "title": "Exploring the Richness of Robusta Coffee Beans",
-            "excerpt": "Robusta coffee beans are known for their strong, bold flavor...",
-            "content": "Robusta coffee beans are the second most popular type of coffee beans. They are typically grown at lower altitudes and are known for their strong, bold flavor with a more bitter taste. The beans are rounder and smaller compared to Arabica beans and have a straight crease. Robusta coffee is often used in espresso blends because of its rich crema and higher caffeine content."
+            "excerpt": "If you’re seeking a bold coffee experience, Robusta coffee beans are your go-to choice!..",
+            "content": load_blog_content("robusta_blog.txt")
         },
         {
             "title": "The Unique Flavor of Liberica Coffee Beans",
-            "excerpt": "Liberica coffee beans have a distinctive flavor profile that sets them apart...",
-            "content": "Liberica coffee beans are less common but have a unique flavor profile that is highly distinctive. They are larger and more irregular in shape compared to Arabica and Robusta beans. Liberica coffee has a bold, smoky flavor with fruity and floral notes. It is grown mainly in the Philippines and Malaysia, and its unique taste makes it a specialty coffee that is enjoyed by coffee enthusiasts around the world."
+            "excerpt": "Prepare your taste buds for an adventure! Liberica coffee beans are the wild card of the coffee world...",
+            "content": load_blog_content("liberica_blog.txt")
         }
     ]
+
 
     if selected_blog_index is None:
         st.title("Edu Blog Page")
         st.write("Welcome to the Edu Blog! Here you'll find interesting articles about coffee beans.")
         
-        # Display blog posts as cards
+        # CARDS 
         for i, blog in enumerate(blogs):
             st.markdown(
                 f"""
@@ -62,8 +69,12 @@ def show_edu_blog_page():
         selected_blog_index = int(selected_blog_index)
         if selected_blog_index < len(blogs):
             blog = blogs[selected_blog_index]
-            st.title(blog["title"])
-            st.write(blog["content"])
+            # UPON CLICKING ON READ MORE 
+            st.markdown(
+                f"<h1 style='color: #000000; font-family: Poppins, Arial; font-size: 40px;'>{blog['title']}</h1>", 
+                unsafe_allow_html=True
+            )
+            st.markdown(blog["content"], unsafe_allow_html=True)
             
             
             # Custom CSS for rounded corners
