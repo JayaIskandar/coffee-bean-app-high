@@ -8,11 +8,15 @@ from streamlit_star_rating import st_star_rating
 from firebase_config import db, auth  # Import your Firebase configuration
 from firebase_admin import credentials, auth, firestore
 
+import os
 
 # Function to read content from a text file
 def load_blog_content(filename):
-    with open(filename, 'r', encoding='utf-8') as file:
+    # Replace 'your_directory' with the actual directory where your files are stored
+    file_path = os.path.join("blog_contents", filename)
+    with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
+
 
     
 def show_edu_blog_page():
