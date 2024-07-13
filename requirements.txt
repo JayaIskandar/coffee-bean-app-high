@@ -12,3 +12,4 @@ google-auth
 google-auth-oauthlib
 fpdf
 streamlit_js_eval
+streamlit_star_rating
