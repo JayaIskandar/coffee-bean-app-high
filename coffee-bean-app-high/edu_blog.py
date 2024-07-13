@@ -1,6 +1,8 @@
 import streamlit as st
 from urllib.parse import urlencode
 
+from streamlit_js_eval import streamlit_js_eval
+
 def show_edu_blog_page():
     
     # Initialize session state for blog viewing
@@ -61,6 +63,7 @@ def show_edu_blog_page():
                 st.query_params.clear()
                 st.switch_page("main.py")
                 st.rerun()
+                streamlit_js_eval(js_expressions="parent.window.location.reload()")
 
 # Call the function in main.py
 if __name__ == "__main__":
