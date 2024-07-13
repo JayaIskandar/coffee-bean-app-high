@@ -60,6 +60,7 @@ def show_edu_blog_page():
                 st.session_state.viewing_blog = None
                 st.query_params.clear()
                 st.switch_page("main.py")
+                st.rerun()
 
 # Call the function in main.py
 if __name__ == "__main__":
