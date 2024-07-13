@@ -63,6 +63,7 @@ def show_edu_blog_page():
                 st.query_params.clear()
                 st.switch_page("main.py")
                 st.rerun()
+                st.rerun()
                 streamlit_js_eval(js_expressions="parent.window.location.reload()")
 
 # Call the function in main.py
