@@ -1,0 +1,98 @@
+{
+    "easy": [
+        {
+            "question": "Which coffee bean is known for its sweet and smooth flavor?",
+            "options": ["Arabica", "Robusta", "Liberica"],
+            "answer": "Arabica",
+            "explanation": "Arabica beans are known for their sweet, smooth, and complex flavor profile, often with hints of fruit and sugar."
+        },
+        {
+            "question": "What is the primary caffeine content difference between Arabica and Robusta?",
+            "options": ["Arabica has more", "Robusta has more", "They have the same"],
+            "answer": "Robusta has more",
+            "explanation": "Robusta beans contain approximately twice the caffeine content of Arabica beans, making them more bitter and strong."
+        },
+        {
+            "question": "What type of coffee is typically used in espresso blends?",
+            "options": ["Arabica", "Robusta", "Liberica"],
+            "answer": "Robusta",
+            "explanation": "Robusta beans are often used in espresso blends to add a strong, bold flavor and a rich crema."
+        },
+        {
+            "question": "Where does Liberica coffee primarily grow?",
+            "options": ["Brazil", "Philippines", "Colombia"],
+            "answer": "Philippines",
+            "explanation": "Liberica coffee is primarily grown in the Philippines, where it is known for its unique, bold flavor."
+        },
+        {
+            "question": "What is the ideal altitude for growing Arabica coffee?",
+            "options": ["Low altitudes", "Medium altitudes", "High altitudes"],
+            "answer": "High altitudes",
+            "explanation": "Arabica coffee grows best at high altitudes, where the cooler temperatures help develop its complex flavors."
+        }
+    ],
+    "medium": [
+        {
+            "question": "What is the flavor profile of Robusta coffee?",
+            "options": ["Sweet and fruity", "Strong and bitter", "Smooth and floral"],
+            "answer": "Strong and bitter",
+            "explanation": "Robusta coffee is known for its strong, bitter flavor with a more pronounced caffeine kick."
+        },
+        {
+            "question": "Which coffee bean has a higher yield per plant?",
+            "options": ["Arabica", "Robusta", "Liberica"],
+            "answer": "Robusta",
+            "explanation": "Robusta plants typically yield more coffee beans per plant than Arabica plants, making them more cost-effective for farmers."
+        },
+        {
+            "question": "What is the main process used to decaffeinate coffee?",
+            "options": ["Chemical process", "Water process", "Carbon dioxide process"],
+            "answer": "Water process",
+            "explanation": "The water process is a common method for decaffeinating coffee, using water to extract caffeine while preserving flavor."
+        },
+        {
+            "question": "Which type of coffee is typically less expensive?",
+            "options": ["Arabica", "Robusta", "Liberica"],
+            "answer": "Robusta",
+            "explanation": "Robusta coffee is generally less expensive than Arabica due to its higher yield and lower growing costs."
+        },
+        {
+            "question": "What is a common roasting method for coffee?",
+            "options": ["Medium roast", "Dark roast", "All of the above"],
+            "answer": "All of the above",
+            "explanation": "All of these are common roasting methods, each providing different flavor profiles and characteristics to the coffee."
+        }
+    ],
+    "hard": [
+        {
+            "question": "Which coffee variety is known for its unique floral aroma?",
+            "options": ["Arabica", "Robusta", "Liberica"],
+            "answer": "Liberica",
+            "explanation": "Liberica coffee is unique for its floral aroma and distinct, bold flavor profile."
+        },
+        {
+            "question": "What is the process of roasting coffee called?",
+            "options": ["Brewing", "Cupping", "Roasting"],
+            "answer": "Roasting",
+            "explanation": "Roasting is the process of heating coffee beans to develop their flavor, aroma, and color."
+        },
+        {
+            "question": "What is the ideal brewing temperature for coffee?",
+            "options": ["90-96°C", "70-80°C", "100-110°C"],
+            "answer": "90-96°C",
+            "explanation": "The ideal brewing temperature for coffee is between 90-96°C to ensure optimal extraction of flavors."
+        },
+        {
+            "question": "Which coffee bean is considered the 'champagne of coffee'?",
+            "options": ["Arabica", "Robusta", "Liberica"],
+            "answer": "Arabica",
+            "explanation": "Arabica is often referred to as the 'champagne of coffee' due to its delicate and nuanced flavor profile."
+        },
+        {
+            "question": "What is the main component in coffee that provides its stimulating effect?",
+            "options": ["Theobromine", "Caffeine", "Tannins"],
+            "answer": "Caffeine",
+            "explanation": "Caffeine is the main stimulant in coffee, providing its characteristic energy-boosting effect."
+        }
+    ]
+}
