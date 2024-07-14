@@ -5,13 +5,17 @@ import time
 from datetime import datetime
 from firebase_config import initialize_firebase, db, firestore
 
+import base64
+
 # Define base directory where the JSON file is located
 base_dir = os.path.abspath(os.path.dirname(__file__))
 css_path = os.path.join(base_dir, 'style.css')
 
+wa_icon_path = os.path.join(base_dir, 'wa-icon.png')
+
+
 # Initialize Firebase
 initialize_firebase()
-
 
 # Function to load questions from a JSON file
 def load_questions():
@@ -25,17 +29,14 @@ questions = load_questions()
 def load_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-        
-        
+
 def reset_game_state():
-    st.session_state.lives = 5
+    st.session_state.lives = 2
     st.session_state.score = 0
     st.session_state.level = "easy"
     st.session_state.question_index = 0
     st.session_state.start_time = None
-    st.session_state.nickname = None
     st.session_state.game_started = False
-    
 
 # Function to show toast message
 def show_toast(message):
@@ -75,7 +76,23 @@ def show_leaderboard():
     leaderboard_html += "</div>"
     st.markdown(leaderboard_html, unsafe_allow_html=True)
 
+# Define your game URL
+game_url = "https://coffee-bean-app-high-v1.streamlit.app/"
 
+# Function to create social sharing links
+def generate_share_link(score, nickname):
+    whatsapp_message = f"{nickname} scored {score} points in the BeanXpert Coffee Quiz Game! Try to beat my score! {game_url}"
+    whatsapp_url = f"https://api.whatsapp.com/send?text={whatsapp_message}"
+
+    return whatsapp_url
+
+# Function to encode image to base64
+def get_base64_image(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode()
+    return encoded_string
+
+####################### START THE GAME #################################
 def show_game_page():
     st.title("Coffee Quiz Game")
 
@@ -113,7 +130,7 @@ def show_game_page():
 
                 # Display hearts for lives
                 st.markdown(
-                    f"<p class='hearts'>{'❤️' * lives} {'🤍' * (5 - lives)}</p>", 
+                    f"<p class='hearts'>{'❤️' * lives} {'🤍' * (2 - lives)}</p>", 
                     unsafe_allow_html=True
                 )
 
@@ -165,7 +182,26 @@ def show_game_page():
                 st.write(f"Time taken: {total_time:.1f} seconds")
                 st.snow()
                 show_leaderboard()
+                
                 st.session_state.game_started = False
+                # Generate share links if nickname is not None
+                if st.session_state.nickname:
+                    whatsapp_link = generate_share_link(score, st.session_state.nickname)
+                    wa_icon_base64 = get_base64_image(wa_icon_path)
+                    st.markdown(
+                        f"""
+                        <div>
+                            <h4>Share your achievement!</h4>
+                            <a href="{whatsapp_link}" target="_blank" class="social-button">
+                                <img src="data:image/png;base64,{wa_icon_base64}" alt="WhatsApp" width="20" height="20">
+                                Share on WhatsApp
+                        </div>
+                        """, unsafe_allow_html=True
+                    )
+                else:
+                    st.warning("Nickname not set, unable to share.")
+                
+                # Reset the game state without clearing nickname
                 reset_game_state()
 
         else:
@@ -177,10 +213,29 @@ def show_game_page():
             st.balloons()
             show_leaderboard()
             st.session_state.game_started = False
+            # Generate share links if nickname is not None
+            if st.session_state.nickname:
+                whatsapp_link = generate_share_link(score, st.session_state.nickname)
+                wa_icon_base64 = get_base64_image(wa_icon_path)
+                st.markdown(
+                    f"""
+                    <div>
+                        <h4>Share your achievement!</h4>
+                        <a href="{whatsapp_link}" target="_blank" class="social-button">
+                            <img src="data:image/png;base64,{wa_icon_base64}" alt="WhatsApp" width="20" height="20">
+                            Share on WhatsApp
+                    </div>
+                    """, unsafe_allow_html=True
+                )
+            else:
+                st.warning("Nickname not set, unable to share.")
+                
+            # Reset the game state without clearing nickname
             reset_game_state()
 
-        # Reset the game state
+        # Reset the game state and clear the nickname
         if st.button("Play Again"):
+            st.session_state.nickname = None
             reset_game_state()
             st.experimental_rerun()
 

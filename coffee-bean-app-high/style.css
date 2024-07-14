@@ -99,3 +99,17 @@
 .leaderboard-entry:last-child {
     border-bottom: none;
 }
+
+
+.social-button {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.social-button:hover {
+    background-color: #0056b3;
+}
