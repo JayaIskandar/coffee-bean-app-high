@@ -118,25 +118,33 @@
 /* ================================================================= */
 /* WHEEL.PY */
 /* Add your CSS styles here */
-#wheel-container {
-    text-align: center;
+.wheel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
-#wheel-button {
+#wheel {
+    max-width: 100%;
+    height: auto;
+}
+
+#spin-wheel-button {
+    margin-top: 20px;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    font-size: 18px;
     cursor: pointer;
 }
 
-#wheel-button:hover {
-    background-color: #45a049;
-}
-
-#wheel-result {
+#result {
     margin-top: 20px;
-    font-size: 20px;
-    font-weight: bold;
+    text-align: center;
+    max-width: 100%;
+    word-wrap: break-word;
+    padding: 0 20px;
+    box-sizing: border-box;
 }

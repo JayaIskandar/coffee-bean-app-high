@@ -53,7 +53,7 @@ def spin_the_wheel():
     </style>
     <div class="wheel-container">
         <canvas id="wheel" width="600" height="600"></canvas>
-        <button onclick="spinWheel()">Spin the Wheel!</button>
+        <button id="spin-wheel-button" onclick="spinWheel()">Spin the Wheel!</button>
         <h2 id="result"></h2>
     </div>
     <script>
@@ -68,7 +68,7 @@ def show_coffee_wheel_page():
     st.title("Spin the Coffee Wheel!")
     st.write("Don't know what coffee to drink for your day? Try this wheel!")
     st.write("Click the button to spin the wheel and get a random coffee drink.")
-    st.components.v1.html(spin_the_wheel(), height=700)
+    st.components.v1.html(spin_the_wheel(), height=800)
 
 if __name__ == "__main__":
     show_coffee_wheel_page()

@@ -110,7 +110,7 @@ def show_game_page():
                 st.session_state.nickname = nickname
                 st.session_state.start_time = datetime.now()
                 st.session_state.game_started = True
-                st.experimental_rerun()
+                st.rerun()
         show_leaderboard()
 
     if st.session_state.game_started:
@@ -172,7 +172,7 @@ def show_game_page():
                         else:
                             st.session_state.level = None
                         st.session_state.question_index = 0
-                    st.experimental_rerun()
+                    st.rerun()
 
             else:
                 ################# IF LOSE THE GAME #####################
@@ -237,7 +237,7 @@ def show_game_page():
         if st.button("Play Again"):
             st.session_state.nickname = None
             reset_game_state()
-            st.experimental_rerun()
+            st.rerun()
 
 # Call the function in your main script
 if __name__ == "__main__":
