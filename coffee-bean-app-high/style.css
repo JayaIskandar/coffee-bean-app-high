@@ -113,3 +113,30 @@
 .social-button:hover {
     background-color: #0056b3;
 }
+
+
+/* ================================================================= */
+/* WHEEL.PY */
+/* Add your CSS styles here */
+#wheel-container {
+    text-align: center;
+}
+
+#wheel-button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#wheel-button:hover {
+    background-color: #45a049;
+}
+
+#wheel-result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}

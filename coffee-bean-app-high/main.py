@@ -231,7 +231,7 @@ def main():
         elif selected == "Flavor Wheel":
             st.markdown(load_html("flavor_wheel.html"), unsafe_allow_html=True)
             import flavor_wheel
-            flavor_wheel.show_flavor_wheel_page()
+            flavor_wheel.show_coffee_wheel_page()
         elif selected == "My Account":
             st.markdown(load_html("my_account.html"), unsafe_allow_html=True)
             import my_account
