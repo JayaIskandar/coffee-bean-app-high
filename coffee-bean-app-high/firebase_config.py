@@ -108,12 +108,25 @@ def verify_user_with_email_password(email, password):
         return None
 
 
+
 def update_user_password(uid, new_password):
     try:
         auth.update_user(uid, password=new_password)
         return True
     except Exception as e:
         print(f"Error updating password: {e}")
+        return False
+
+def delete_user_account(uid):
+    try:
+        # Delete the user from Firebase Authentication
+        auth.delete_user(uid)
+        # Delete the user's data from Firestore
+        user_ref = db.collection("users").document(uid)
+        user_ref.delete()
+        return True
+    except Exception as e:
+        print(f"Error deleting user account: {e}")
         return False
 
 

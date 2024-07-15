@@ -1,5 +1,5 @@
 import streamlit as st
-from firebase_config import initialize_firebase, db, update_user_password
+from firebase_config import initialize_firebase, db, update_user_password, delete_user_account
 
 def show_my_account_page():
     st.title("Account Page")
@@ -24,7 +24,7 @@ def show_my_account_page():
         st.write(f"User ID: {user_data.get('uid', 'N/A')}")
         st.write(f"Account Created At: {user_data.get('createdAt', 'N/A')}")
         
-        # FORM TO UPDATE PASSWORD
+        # UPDATE ACCOUNT DETAILS (PASSWORD AS OF NOW)
         st.write("Update Password")
         with st.form(key="unique_password_update_form"):
             new_password = st.text_input("New Password", type="password")
@@ -44,6 +44,22 @@ def show_my_account_page():
                         st.success("Password updated successfully.")
                     else:
                         st.error("Failed to update password.")
+        
+        # DELETE ACCOUNT 
+        st.write("Delete Account")
+        confirm_delete = st.checkbox("I confirm that I want to delete my account and understand that this action cannot be undone.")
+        if st.button("Delete Account"):
+            if confirm_delete:
+                success = delete_user_account(user_id)
+                if success:
+                    st.success("Account deleted successfully.")
+                    # Clear the session state and redirect to login or home page
+                    st.session_state.clear()
+                    st.experimental_rerun()
+                else:
+                    st.error("Failed to delete account.")
+            else:
+                st.error("Please confirm that you want to delete your account.")
     else:
         st.error("User details not found.")
 
