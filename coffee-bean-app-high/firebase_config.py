@@ -108,6 +108,13 @@ def verify_user_with_email_password(email, password):
         return None
 
 
+def update_user_password(uid, new_password):
+    try:
+        auth.update_user(uid, password=new_password)
+        return True
+    except Exception as e:
+        print(f"Error updating password: {e}")
+        return False
 
 
 
