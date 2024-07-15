@@ -101,6 +101,7 @@ def verify_user_with_email_password(email, password):
         user = auth.get_user_by_email(email)
         if user:
             # Implement password verification logic here
+            st.session_state['user'] = user.uid  # Store user ID in session state
             return user
     except Exception as e:
         print(f"Error verifying user: {e}")
