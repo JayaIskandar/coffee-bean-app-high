@@ -6,6 +6,13 @@ import json
 
 import streamlit as st
 
+import time
+
+# Global variables
+db = None
+firebase_initialized = False   # Flag to track if Firebase is already initialized
+MAX_RETRIES = 5
+
 
 # Function to construct Firebase credentials from environment variables
 def get_firebase_credentials_from_env():
@@ -29,30 +36,33 @@ def get_firebase_credentials_from_env():
         "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
     }
 
-# Global Firestore client
-db = None
-firebase_initialized = False  # Flag to track if Firebase is already initialized
+
 
 def initialize_firebase():
     global db, firebase_initialized
     
-    if not firebase_initialized:
+    for attempt in range(MAX_RETRIES):
         try:
-            # Try to get the default app, if it exists
-            firebase_admin.get_app()
-        except ValueError:
-            # If the default app doesn't exist, initialize it using credentials from environment variables
-            firebase_credentials = get_firebase_credentials_from_env()
-            cred = credentials.Certificate(firebase_credentials)
+            if not firebase_initialized:
+                firebase_credentials = get_firebase_credentials_from_env()
+                cred = credentials.Certificate(firebase_credentials)
+                firebase_admin.initialize_app(cred)
+                db = firestore.client()
+                firebase_initialized = True
+                print(f"Firebase initialized successfully on attempt {attempt + 1}.")
+                return
+            else:
+                print("Firebase app already initialized.")
+                return
+        except ValueError as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < MAX_RETRIES - 1:
+                print("Retrying in 2 seconds...")
+                time.sleep(2)  # Wait for 2 seconds before retrying
+            else:
+                print("All attempts to initialize Firebase have failed.")
+                raise
             
-            firebase_admin.initialize_app(cred)
-        
-        # Initialize Firestore
-        db = firestore.client()
-        firebase_initialized = True  # Mark Firebase as initialized
-        print("Firebase initialized successfully.")
-    else:
-        print("Firebase app already initialized.")
 
 def verify_id_token(id_token):
     try:
