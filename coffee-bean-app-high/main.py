@@ -25,6 +25,46 @@ base_url = os.getenv("BASE_URL_DEV") if os.getenv("ENVIRONMENT") == 'development
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
 
+##################### TO MAKE FULL WIDTH  #####################
+# Set page config once at the very beginning
+st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+##################### TO MAKE FULL WIDTH  #####################
+
+
+# FUNCTION FOR LANDING PAGE (BEFORE AUTHENTICATED)
+def show_landing_page():
+    # Remove default Streamlit styling
+    st.markdown("""
+        <style>
+            #root > div:nth-child(1) > div > div > div > div > section > div {
+                padding-top: 0;
+            }
+            .reportview-container {
+                margin-top: -2em;
+            }
+            #MainMenu {visibility: hidden;}
+            .stDeployButton {display:none;}
+            footer {visibility: hidden;}
+            #stDecoration {display:none;}
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Use a div wrapper for the landing page content
+    #st.markdown('<div class="landing-page">', unsafe_allow_html=True)
+    
+
+    
+    landing_html_path = os.path.join(base_dir, 'landing.html')
+    with open(landing_html_path, 'r', encoding='utf-8') as file:
+        landing_html = file.read()
+    
+    st.html(landing_html)
+    #st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+
+# FUNCTION FOR LANDING PAGE (BEFORE AUTHENTICATED)    
+
+########################################################################
+
 
 def exchange_code_for_token(code):
     
@@ -92,7 +132,7 @@ def exchange_code_for_token(code):
     
 def show_sign_in_page():
     st.title("Sign In")
-    provider = st.selectbox("Select Provider", ["Google", "Email/Password"])
+    provider = st.selectbox("Select Provider", ["Google", "Email/Password"], key="signin_selectbox")
     google_client_id = os.getenv("GOOGLE_CLIENT_ID")  # Retrieve Google Client ID from environment variable
     if provider == "Google" and google_client_id:
         sign_in_url = f"https://accounts.google.com/o/oauth2/auth?client_id={google_client_id}&redirect_uri={base_url}&response_type=code&scope=openid%20email%20profile&access_type=offline"
@@ -173,6 +213,7 @@ def show_menu(default_index=0):
         )
 
 
+
 #FUNCTION FOR EDU BLOG 
 def show_blog_article():
     import edu_blog
@@ -193,11 +234,13 @@ def main():
         # If a specific blog is requested, show only the blog article without sidebar
         show_blog_article()
     elif not st.session_state["authenticated"]:
-        option = st.sidebar.selectbox("Select Option", ["Sign In", "Register"])
+        option = st.sidebar.selectbox("Select Option", ["Home", "Sign In", "Register"], key="main_selectbox")
         if option == "Sign In":
             show_sign_in_page()
         elif option == "Register":
             show_register_page()
+        elif option == "Home":
+            show_landing_page()
     else:
         st.sidebar.write("Authenticated User Menu")
         
@@ -219,7 +262,9 @@ def main():
             import edu_blog
             edu_blog.show_edu_blog_page()
         elif selected == "Home":
+            st.markdown('<div class="page-home">', unsafe_allow_html=True)
             st.markdown(load_html("dashboard.html"), unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
         elif selected == "Predict":
             st.markdown(load_html("predict.html"), unsafe_allow_html=True)
             import predict
@@ -244,6 +289,7 @@ def main():
     
     # Don't clear the 'page' query parameter here
     # This allows the 'edu_blog' page to persist when "Read More" is clicked
+
 
 if __name__ == "__main__":
     main()

@@ -52,7 +52,7 @@ def initialize_firebase():
         firebase_initialized = True  # Mark Firebase as initialized
         print("Firebase initialized successfully.")
     else:
-        print("Firebase app already initialized.")
+        print("Firebase app already initialized.s")
 
 def verify_id_token(id_token):
     try:

@@ -3,44 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <style>
-        .landing-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
-            text-align: center;
-        }
-        .landing-container h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        .landing-container p {
-            font-size: 1.5em;
-            margin-bottom: 40px;
-        }
-        .landing-container .start-button {
-            padding: 10px 20px;
-            font-size: 1.2em;
-            color: #fff;
-            background: #e74c3c;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .landing-container .start-button:hover {
-            background: #c0392b;
-        }
-    </style>
+    <title>Coffee Bean Service Landing Page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="landing-container">
-        <h1>Welcome to Coffee Bean Predictor</h1>
-        <p>Select a menu item to get started</p>
-        <button class="start-button" onclick="window.location.href='/#Menu'">Get Started</button>
+    <div class="header-section">
+        <div class="parallax" style="background-image: url('https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/view-3d-roasted-coffee-beans.jpg');">
+            <h1 class="header-title">BeanXpert<span class="copyright-symbol">&copy;</span><br> <span class="typewriter-text"></span></h1>
+            <p class="header-subtitle">BeanXpert turns your coffee passion into expertise.<br> Get predictions and insights for the perfect cup—no experience needed. <br> <br> <i>be an expert today. </i></p>
+        </div>
     </div>
+    
+    <div class="custom-card-quadram">
+        <h1 class="card-title-quadram">“A 2018 UK study conducted by the Quadram Institute found that 10% of coffees labeled “100% Arabica” contained significant levels of Robusta.”</h1>
+    </div>
+
+    <div class="custom-card">
+        <h1 class="card-title">“Are you sure the coffee beans you bought are 100% genuine and not mixed with other kinds of beans?”</h1>
+        <p class="card-description">At BeanXpert, we're here to put your doubts to rest. <br> Our mission is to help you ensure the authenticity of your coffee beans, giving you peace of mind with every cup. <br><br> But that's not all. We also offer a range of supplementary features designed to BOOST your coffee knowledge and skills. <br> Whether you're a coffee enthusiast or just starting out, BeanXpert is your go-to for turning coffee passion into expertise.</p>
+        <br>
+        <p class="card-description"><i>Jaya Iskandar - Founder of BeanXpert</i></p>
+    </div>
+
+    <div id="features" class="features">
+        <h2 class="features-title">Our Features</h2>
+        <div class="feature-card">
+            <h3 class="feature-title">Bean Prediction</h3>
+            <p class="feature-description">Unsure about your coffee bean type? Recognize it with our system!</p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title">Gamification</h3>
+            <p class="feature-description">Not fun enough? Let's see who can reach the top leaderboard!</p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title">Edu Blogs</h3>
+            <p class="feature-description">Enjoy reading and gain insights on coffee bean!</p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title">Flavor Wheel</h3>
+            <p class="feature-description">Can't decide on what coffee drink to have today? Spin it with the wheel!</p>
+        </div>
+    </div>
+
+    <div class="image-header-section left">
+        <video width="480" height="480" autoplay loop muted class="section-video">
+            <source src="https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/209419_tiny.mp4" type="video/mp4">
+        </video>
+        <div class="section-header">
+            <h1 class="section-title">Discover Your Coffee</h1>
+            <p class="section-description">Know your beans and enhance your coffee experience.</p>
+        </div>
+    </div>
+
+    <div class="image-header-section right" style="margin-left: 60px;" >
+        <div class="section-header">
+            <h1 class="section-title">Crafted for You</h1>
+            <p class="section-description">Every content is a masterpiece crafted just for you.</p>
+        </div>
+        <video width="480" height="480" autoplay loop muted class="section-video" style="margin-right: 170px;" >
+            <source src="https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/44802-440260915_medium.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="image-header-section left">
+        <video width="480" height="480" autoplay loop muted class="section-video">
+            <source src="https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/51212-463624236_medium.mp4" type="video/mp4">
+        </video>
+        <div class="section-header">
+            <h1 class="section-title">From Bean to Knowledge</h1>
+            <p class="section-description">Educate yourself on the origins and characteristics of your favorite <br> coffee beans.</p>
+        </div>
+    </div>
+
+    <!-- FAQs Section -->
+    <div id="faq" class="faq">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <hr>
+        <div class="faq-item">
+            <h3 class="faq-question">Is this entirely free?</h3>
+            <p class="faq-answer">Yes, we believe that such knowledge should be given access for FREE to the public.</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-question">How accurate are the bean predictions?</h3>
+            <p class="faq-answer">Our bean prediction system uses advanced computer vision algorithms to ensure high accuracy, but we recommend verifying with a professional for critical decisions.</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-question">What types of coffee beans can I identify?</h3>
+            <p class="faq-answer">You can identify various types of coffee beans: Arabica, Robusta, and Liberica.</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-question">Is my data safe with BeanXpert?</h3>
+            <p class="faq-answer">Yes, we prioritize your privacy and security. Your data is encrypted and not shared with third parties.</p>
+        </div>
+        <div class="faq-item">
+            <h3 class="faq-question">Do I have to create an account in order to access the features?</h3>
+            <p class="faq-answer">Yes, you have to create an account and be a part of BeanXpert, it's free tho, just give it a try!</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p class="footer-description">Copyright © BeanXpert, 2024. </p>   
+    </div>
+
 </body>
 </html>
