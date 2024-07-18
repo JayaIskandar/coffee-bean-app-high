@@ -13,4 +13,3 @@ google-auth-oauthlib
 fpdf
 streamlit_js_eval
 st-star-rating
-webbrowser
