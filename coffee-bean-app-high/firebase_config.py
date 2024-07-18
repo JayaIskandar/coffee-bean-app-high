@@ -4,8 +4,9 @@ from firebase_admin.auth import InvalidIdTokenError
 import os
 import json
 
-import streamlit as st
+import requests
 
+import streamlit as st
 
 # Function to construct Firebase credentials from environment variables
 def get_firebase_credentials_from_env():
@@ -62,17 +63,18 @@ def verify_id_token(id_token):
         print(f"Error verifying ID token: {e}")
         return None
 
-def create_user_with_email_password(email, password):
+def create_user_with_email_password(name, email, password):
     try:
         global db
         
         if db is None:
             initialize_firebase()  # Initialize Firebase if not already initialized
         
-        user = auth.create_user(email=email, password=password)
+        user = auth.create_user(display_name=name, email=email, password=password)
         # Store user details in Firestore (including createdAt timestamp if not set)
         user_ref = db.collection("users").document(user.uid)
         user_data = {
+            "name": name,
             "email": email,
             "uid": user.uid,
         }
@@ -93,20 +95,29 @@ def create_user_with_email_password(email, password):
 
 def verify_user_with_email_password(email, password):
     try:
-        global db
+        # Firebase Authentication REST API endpoint
+        url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={os.getenv('FIREBASE_API_KEY')}"
         
-        if db is None:
-            initialize_firebase()  # Initialize Firebase if not already initialized
+        # Request payload
+        payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": True
+        }
         
-        user = auth.get_user_by_email(email)
-        if user:
-            # Implement password verification logic here
-            st.session_state['user'] = user.uid  # Store user ID in session state
-            return user
+        # Send POST request to Firebase
+        response = requests.post(url, json=payload)
+        
+        # Check if the request was successful
+        if response.status_code == 200:
+            user_data = response.json()
+            return auth.get_user(user_data['localId'])
+        else:
+            print(f"Authentication failed: {response.json()['error']['message']}")
+            return None
     except Exception as e:
         print(f"Error verifying user: {e}")
         return None
-
 
 
 def update_user_password(uid, new_password):
@@ -130,6 +141,6 @@ def delete_user_account(uid):
         return False
 
 
-
 # Call initialize_firebase() once at the start of your application
 initialize_firebase()
+

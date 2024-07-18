@@ -17,7 +17,6 @@
 }
 */
 
-
 /* LITERALLY USELESS ================================================================= */
 html, body {
     margin: 0;
@@ -89,7 +88,6 @@ html, body {
     margin-right: 50px;
 }
 
-
 .section-image {
     width: 50%; /* Adjust as needed */
     max-width: 400px; /* Limit image size */
@@ -115,7 +113,6 @@ html, body {
 }
 
 
-
 .parallax {
     height: 600px; /* Adjust height for a larger image */
     width: 1800px;
@@ -130,12 +127,10 @@ html, body {
     align-items: center; /* Center horizontally */
 }
 
-
 .copyright-symbol {
     font-size: 0.8em; /* Adjust size as needed */
     vertical-align: super; /* Adjust vertical alignment if necessary */
 }
-
 
 .custom-card-quadram {
     position: relative;
@@ -154,7 +149,6 @@ html, body {
     margin-top: -20px;
     text-align: center;
 }
-
 
 .custom-card {
     position: relative;
@@ -182,7 +176,6 @@ html, body {
     font-size: 18px;
     text-align: center;
 }
-
 
 .features {
     padding: 50px 0;
@@ -245,7 +238,6 @@ html, body {
     }
 }
 
-
 /* FAQ ================================================================= */
 .faq {
     padding: 50px 20px; /* Padding for top/bottom and sides */
@@ -285,7 +277,6 @@ html, body {
     font-weight: bold;
 }
 
-
 hr {
     border: none; /* Remove default border */
     height: 10px; /* Set thickness */
@@ -302,10 +293,48 @@ hr {
 }
 
 
+/* END OF PAGE 1 */
+/* END OF PAGE 1 */
+/* END OF PAGE 1 */
 
-/* END OF PAGE 1 */
-/* END OF PAGE 1 */
-/* END OF PAGE 1 */
+/* SIGN IN FORM =================================================================*/
+.signin-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+.signin-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.signin-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.signin-button:hover {
+    background-color: #45a049;
+}
+.signin-select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
 
 
 
@@ -328,19 +357,35 @@ hr {
 }
 */
 
-
 [data-testid="stHeader"] {
     background-color: #fecc09;
 }
 
-
 [data-testid="stSidebar"] {
-    background-image: url("https://images.unsplash.com/photo-1501426026826-31c667bdf23d");
-    background-size: cover;
+    position: relative;
+    overflow: hidden;
 }
 
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/view-3d-roasted-coffee-beans.jpg");
+    background-size: cover;
+    background-position: 65% center;
+    transform: rotate(180deg); /* Rotate the image 180 degrees clockwise */
+    z-index: -1; /* Ensure the pseudo-element is behind the content */
+}
 
-
+/*
+[data-testid="stSidebarHeader"] {
+    background-image: url("https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/view-3d-roasted-coffee-beans.jpg");
+    background-size: cover;
+}
+*/
 
 /* ================================================================= */
 
@@ -372,11 +417,9 @@ hr {
     color: #6c63ff;
 }
 
-
 .stImage img {
     border-radius: 50px; /* Adjust the value to change the roundness of the corners */
 }
-
 
 /* ================================================================= */
 /* GAME.PY */
@@ -409,7 +452,6 @@ hr {
     to { width: 100%; }
 }
 
-
 .hearts {
     font-size: 24px;
     margin-bottom: 16px;
@@ -441,7 +483,6 @@ hr {
     border-bottom: none;
 }
 
-
 .social-button {
     display: inline-block;
     margin: 5px;
@@ -454,7 +495,6 @@ hr {
 .social-button:hover {
     background-color: #0056b3;
 }
-
 
 /* ================================================================= */
 /* WHEEL.PY */
@@ -489,7 +529,6 @@ hr {
     padding: 0 20px;
     box-sizing: border-box;
 }
-
 
 
 
@@ -551,7 +590,6 @@ hr {
         text-align: center;
     }
 }
-
 
 /* MEDIA RESPONSIVE ==== PHONE M & L ====================================== */
 @media (max-width: 480px) {

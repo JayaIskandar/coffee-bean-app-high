@@ -24,12 +24,10 @@ base_url = os.getenv("BASE_URL_DEV") if os.getenv("ENVIRONMENT") == 'development
 # Define base directory where HTML files are located
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
-
 ##################### TO MAKE FULL WIDTH  #####################
 # Set page config once at the very beginning
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 ##################### TO MAKE FULL WIDTH  #####################
-
 
 # FUNCTION FOR LANDING PAGE (BEFORE AUTHENTICATED)
 def show_landing_page():
@@ -64,7 +62,6 @@ def show_landing_page():
 # FUNCTION FOR LANDING PAGE (BEFORE AUTHENTICATED)    
 
 ########################################################################
-
 
 def exchange_code_for_token(code):
     
@@ -105,7 +102,7 @@ def exchange_code_for_token(code):
     except auth.UserNotFoundError:
         firebase_user = auth.create_user(
             email=id_info['email'],
-            display_name=id_info.get('name'),
+            name=id_info['name'],
             photo_url=id_info.get('picture')
         )
     
@@ -114,7 +111,7 @@ def exchange_code_for_token(code):
     user_data = {
         "email": firebase_user.email,
         "uid": firebase_user.uid,
-        "display_name": firebase_user.display_name,
+        "name": firebase_user.name,
         "photo_url": firebase_user.photo_url,
         "createdAt": firestore.SERVER_TIMESTAMP  # Add the createdAt timestamp
     }
@@ -123,21 +120,52 @@ def exchange_code_for_token(code):
     
     return {
         "uid": firebase_user.uid,
+        "name": firebase_user.name,
         "email": firebase_user.email,
         "createdAt": firestore.SERVER_TIMESTAMP
     }
 
-
-    
     
 def show_sign_in_page():
     st.title("Sign In")
-    provider = st.selectbox("Select Provider", ["Google", "Email/Password"], key="signin_selectbox")
+    
+    # Email input
+    email = st.text_input("Email")
+    # Password input
+    password = st.text_input("Password", type="password")
+    
+    # Sign In button for Email/Password
+    if st.button("Sign In"):
+        user = verify_user_with_email_password(email, password)
+        if user:
+            st.session_state["user_id"] = user.uid  # Store user ID in session state
+            st.session_state["authenticated"] = True
+            # Update URL to remove any previous query parameters and set authenticated to true
+            st.query_params.clear()
+            st.query_params["authenticated"] = "true"
+            st.rerun()
+        else:
+            st.error("Failed to sign in. Please check your credentials and try again.")
+    
+    
+    # Horizontal line with spacing
+    st.markdown("<hr style='margin: 20px 0;'>", unsafe_allow_html=True)
+    
+    # OR text
+    st.markdown("<h5 style='text-align: center;'>OR</h5>", unsafe_allow_html=True)
+    
+    # Google sign-in section
     google_client_id = os.getenv("GOOGLE_CLIENT_ID")  # Retrieve Google Client ID from environment variable
-    if provider == "Google" and google_client_id:
+    
+    if google_client_id:
         sign_in_url = f"https://accounts.google.com/o/oauth2/auth?client_id={google_client_id}&redirect_uri={base_url}&response_type=code&scope=openid%20email%20profile&access_type=offline"
-        st.markdown(f'[Sign in with Google]({sign_in_url})', unsafe_allow_html=True)
         
+        # Center the Google sign-in button
+        st.markdown(f'<div style="text-align: center;">'
+                    f'<a href="{sign_in_url}" style="display: inline-block; padding: 10px 20px; color: white; background-color: #4285F4; border-radius: 5px; text-decoration: none; margin-top: 20px; margin-right:20px; font-weight: bold;">'
+                    f'<img src="https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/icons8-google-48.png" style="vertical-align: middle; margin-right: 8px;" width="24" height="24">'
+                    f'Sign in with Google</a></div>', unsafe_allow_html=True)
+
         # Check if the user has returned from Google authentication
         code = st.query_params.get("code")
         if code:
@@ -151,37 +179,57 @@ def show_sign_in_page():
                 st.rerun()
             except Exception as e:
                 st.error(f"Failed to authenticate with Google: {str(e)}")
-    elif provider == "Email/Password":
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        if st.button("Sign In"):
-            user = verify_user_with_email_password(email, password)
-            if user:
-                st.session_state["user_id"] = user.uid  # Store user ID in session state
-                st.session_state["authenticated"] = True
-                # Update URL to remove any previous query parameters and set authenticated to true
-                st.query_params.clear()
-                st.query_params["authenticated"] = "true"
-                st.rerun()
-            else:
-                st.error("Failed to sign in. Please check your credentials and try again.")
     else:
         st.error("Google Client ID not found. Please set the GOOGLE_CLIENT_ID environment variable.")
 
-        
 def show_register_page():
     st.title("Register")
+    name = st.text_input("Name")
     email = st.text_input("Email")
     password = st.text_input("Password", type="password")
     confirm_password = st.text_input("Confirm Password", type="password")
     if st.button("Register"):
         if password == confirm_password:
-            user = create_user_with_email_password(email, password)
+            user = create_user_with_email_password(name, email, password)
             if user:
                 st.success("A verification email has been sent to your email address.")
             else:
                 st.error("Failed to create user. Please try again.")
 
+    # Horizontal line with spacing
+    st.markdown("<hr style='margin: 20px 0;'>", unsafe_allow_html=True)
+    
+    # OR text
+    st.markdown("<h5 style='text-align: center;'>OR</h5>", unsafe_allow_html=True)
+    
+    # Google sign-in section
+    google_client_id = os.getenv("GOOGLE_CLIENT_ID")  # Retrieve Google Client ID from environment variable
+    if google_client_id:
+        sign_in_url = f"https://accounts.google.com/o/oauth2/auth?client_id={google_client_id}&redirect_uri={base_url}&response_type=code&scope=openid%20email%20profile&access_type=offline"
+        
+        # Center the Google sign-in button
+        st.markdown(f'<div style="text-align: center;">'
+                    f'<a href="{sign_in_url}" style="display: inline-block; padding: 10px 20px; color: white; background-color: #4285F4; border-radius: 5px; text-decoration: none; margin-top: 20px; margin-right:20px; font-weight: bold;">'
+                    f'<img src="https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/icons8-google-48.png" style="vertical-align: middle; margin-right: 8px;" width="24" height="24">'
+                    f'Register with Google</a></div>', unsafe_allow_html=True)
+
+        # Check if the user has returned from Google authentication
+        code = st.query_params.get("code")
+        if code:
+            try:
+                # Exchange the code for a token and get user info
+                user_info = exchange_code_for_token(code)
+                st.session_state["user_id"] = user_info["uid"]
+                st.session_state["authenticated"] = True
+                st.query_params.clear()
+                st.query_params["authenticated"] = "true"
+                st.rerun()
+            except Exception as e:
+                st.error(f"Failed to authenticate with Google: {str(e)}")
+    else:
+        st.error("Google Client ID not found. Please set the GOOGLE_CLIENT_ID environment variable.")
+        
+        
 # Load CSS
 def load_css(file_name):
     with open(file_name) as f:
@@ -211,7 +259,6 @@ def show_menu(default_index=0):
             default_index=default_index,
             key="main_menu"  # Add this line
         )
-
 
 
 #FUNCTION FOR EDU BLOG 
@@ -290,6 +337,6 @@ def main():
     # Don't clear the 'page' query parameter here
     # This allows the 'edu_blog' page to persist when "Read More" is clicked
 
-
 if __name__ == "__main__":
     main()
+
