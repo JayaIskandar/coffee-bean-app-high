@@ -10,6 +10,8 @@ from google_auth_oauthlib.flow import Flow
 from firebase_admin import auth, firestore
 import json
 
+import webbrowser
+
 # Explicitly load the .env file if running locally
 if os.path.exists('.env'):
     from dotenv import load_dotenv
@@ -121,6 +123,12 @@ def exchange_code_for_token(code):
     
     user_ref.set(user_data, merge=True)  # Merge with existing data if any
     
+    # Update session state
+    st.session_state["user_id"] = firebase_user.uid
+    st.session_state["authenticated"] = True
+    
+    
+    
     return {
         "uid": firebase_user.uid,
         "email": firebase_user.email,
@@ -144,8 +152,8 @@ def show_sign_in_page():
             try:
                 # Exchange the code for a token and get user info
                 user_info = exchange_code_for_token(code)
-                st.session_state["user_id"] = user_info["uid"]
-                st.session_state["authenticated"] = True
+                #st.session_state["user_id"] = user_info["uid"]
+                #st.session_state["authenticated"] = True
                 st.query_params.clear()
                 st.query_params["authenticated"] = "true"
                 st.rerun()
@@ -196,10 +204,28 @@ def load_html(file_name):
 
 # Function to handle logout
 def handle_logout():
-    st.session_state["user_id"] = None
-    st.session_state["authenticated"] = False
-    st.query_params()
-    st.rerun()
+    # Clear all session state
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    
+    # Set the just_logged_out flag
+    st.session_state["just_logged_out"] = True
+    
+    # Clear all query parameters
+    st.query_params.clear()
+    
+    # Determine the redirect URL based on the environment
+    if os.getenv("ENVIRONMENT") == 'development':
+        redirect_url = "http://localhost:8501"
+    else:
+        redirect_url = "https://coffee-bean-app-high-v1.streamlit.app/"
+    
+    # Open the redirect URL in a new browser tab
+    webbrowser.open(redirect_url, new=0)
+    
+    # Stop further processing to ensure the user is redirected
+    st.stop()
+    
 
 def show_menu(default_index=0):
     with st.sidebar:
@@ -219,29 +245,33 @@ def show_blog_article():
     import edu_blog
     edu_blog.show_edu_blog_page()
     
-    
 def main():
     css_path = os.path.join(os.path.dirname(__file__), 'style.css')
     load_css(css_path)  # Load CSS
 
+    # Check for authentication status
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = st.query_params.get("authenticated") == "true"
+        
+    # Check if we have just logged out
+    just_logged_out = st.session_state.get("just_logged_out", False)
+    if just_logged_out:
+        st.session_state["just_logged_out"] = False
+        st.query_params()
+        st.rerun()
+        return  # Exit the function early to avoid processing any leftover auth code
+        
+    # Check if we have a code from Google OAuth
+    code = st.query_params.get("code")
+    if code and not st.session_state["authenticated"]:
+        user_info = exchange_code_for_token(code)
+        if user_info:
+            st.session_state["authenticated"] = True
+            st.query_params["authenticated"] = "true"
+            st.rerun()
 
-    # Check if a specific blog is requested
-    blog_index = st.query_params.get("blog")
-    
-    if blog_index is not None:
-        # If a specific blog is requested, show only the blog article without sidebar
-        show_blog_article()
-    elif not st.session_state["authenticated"]:
-        option = st.sidebar.selectbox("Select Option", ["Home", "Sign In", "Register"], key="main_selectbox")
-        if option == "Sign In":
-            show_sign_in_page()
-        elif option == "Register":
-            show_register_page()
-        elif option == "Home":
-            show_landing_page()
-    else:
+    if st.session_state["authenticated"]:
+        # User is authenticated, show the authenticated user menu
         st.sidebar.write("Authenticated User Menu")
         
         # Check if a specific page is requested in the URL
@@ -286,6 +316,31 @@ def main():
         else:
             # Default to Home if no valid selection
             st.markdown(load_html("dashboard.html"), unsafe_allow_html=True)
+    else:
+        # User is not authenticated
+        # Check if we have a code from Google OAuth
+        code = st.query_params.get("code")
+        if code:
+            try:
+                exchange_code_for_token(code)
+                st.rerun()
+            except Exception as e:
+                st.error(f"Failed to authenticate with Google: {str(e)}")
+        
+        # Check if a specific blog is requested
+        blog_index = st.query_params.get("blog")
+        
+        if blog_index is not None:
+            # If a specific blog is requested, show only the blog article without sidebar
+            show_blog_article()
+        else:
+            option = st.sidebar.selectbox("Select Option", ["Home", "Sign In", "Register"], key="main_selectbox")
+            if option == "Sign In":
+                show_sign_in_page()
+            elif option == "Register":
+                show_register_page()
+            elif option == "Home":
+                show_landing_page()
     
     # Don't clear the 'page' query parameter here
     # This allows the 'edu_blog' page to persist when "Read More" is clicked
