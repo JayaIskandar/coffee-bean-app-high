@@ -2,6 +2,397 @@
 .stApp {
     background-color: #2c5cbd;
 }
+<<<<<<< Updated upstream
+=======
+*/
+
+
+/* LITERALLY USELESS ================================================================= */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Ensure full height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: black; /* Change font color to black */
+}
+
+.header-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center; /* Center text */
+    color: black; /* Change font color to black */
+}
+
+.header-title {
+    font-size: 5em;
+    margin-bottom: 20px;
+    color: black; /* Change font color to black */
+}
+
+.header-subtitle {
+    font-size: 1.2em; /* Adjust size as needed */
+    margin-bottom: 20px; /* Space below the subtitle */
+    color: black; /* Change font color to black */
+}
+
+.header-image {
+    width: 100%;
+    max-width: 800px; /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.image-header-section {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    color: black; /* Change font color to black */
+}
+
+.image-header-section.left {
+    display: flex; /* Use flexbox */
+    flex-direction: row; /* Image on left */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin: 20px 0; /* Optional: add some vertical spacing */
+}
+
+.image-header-section.right {
+    display: flex; /* Use flexbox */
+    flex-direction: row; /* Image on left */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin: 20px 0; /* Optional: add some vertical spacing */
+    margin-right: 60px;
+}
+
+.image-header-section video {
+    border-radius: 25px; /* Adjust the value for more or less roundness */
+    overflow: hidden; /* Ensures any overflow is hidden */
+    max-width: 100%; /* Ensures responsiveness */
+    height: auto; /* Maintains aspect ratio */
+    margin-right: 50px;
+}
+
+
+.section-image {
+    width: 50%; /* Adjust as needed */
+    max-width: 400px; /* Limit image size */
+    margin-right: 20px; /* Space between image and text */
+}
+
+.section-header {
+    width: 50%; /* Adjust as needed */
+    margin-top: -100px;
+}
+
+.section-title {
+    font-size: 2.5em;
+    margin: 0;
+    color: black; /* Change font color to black */
+ 
+}
+
+.section-description {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: black; /* Change font color to black */
+}
+
+
+
+.parallax {
+    height: 600px; /* Adjust height for a larger image */
+    width: 1800px;
+    margin-top: 5px; /* Add margin at the top */
+    background-attachment: fixed; /* Fixed background */
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover; /* Cover the entire section */
+    display: flex; /* Flexbox for centering */
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+}
+
+
+.copyright-symbol {
+    font-size: 0.8em; /* Adjust size as needed */
+    vertical-align: super; /* Adjust vertical alignment if necessary */
+}
+
+
+.custom-card-quadram {
+    position: relative;
+    z-index: 10;
+    border-radius: 8px;
+    padding: 40px;
+    width: 80vw;
+    height: auto; /* Change to auto to adjust based on content */
+    margin: 5vh auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: rgb(0, 0, 0);
+}
+
+.card-title-quadram {
+    font-size: 30px;
+    margin-top: -20px;
+    text-align: center;
+}
+
+
+.custom-card {
+    position: relative;
+    z-index: 10;
+    background-color: #6b3703; /* Semi-transparent green */
+    border-radius: 8px;
+    padding: 40px;
+    width: 80vw;
+    height: auto; /* Change to auto to adjust based on content */
+    margin: 5vh auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
+}
+
+.card-title {
+    color: white;
+    font-size: 40px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+.card-description {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+
+.features {
+    padding: 50px 0;
+
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.features-title {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    width: 100%; /* Ensure title takes full width */
+    font-weight: bold;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    flex: 1 1 calc(25% - 40px); /* Each card takes up half of the row, minus margins */
+    max-width: calc(25% - 40px); /* Ensure cards don't grow larger than half */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    height: auto; /* Adjust to content */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative; /* Needed for pseudo-elements */
+    backdrop-filter: blur(10px); /* Blur effect */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Border for glass effect */
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.feature-card:hover {
+    transform: translateY(-10px); /* Lift the card on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px 10px rgba(255, 255, 255, 1); /* Add a deeper shadow and glow around the card */
+}
+
+.feature-title {
+    font-size: 1.5em;
+    color: #000000; /* White text for better contrast */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+.feature-description {
+    font-size: 1em;
+    color: #000000; /* White text for better contrast */
+    margin-top: 10px; /* Space above the description */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .feature-card {
+        flex: 1 1 calc(100% - 40px); /* Full width on smaller screens */
+        max-width: calc(100% - 40px);
+    }
+}
+
+
+/* FAQ ================================================================= */
+.faq {
+    padding: 50px 20px; /* Padding for top/bottom and sides */
+}
+
+.faq-title {
+    font-size: 2.5em; /* Larger font for title */
+    font-weight: bold;
+    margin-bottom: 30px; /* Space below title */
+    color: #333; /* Dark color for title */
+}
+
+.faq-item {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px; /* Padding inside the item */
+    margin: 15px 0; /* Margin for spacing between items */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+}
+
+.faq-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+.faq-question {
+    font-size: 1.5em; /* Size for question text */
+    margin: 0; /* Remove default margin */
+    color: #007BFF; /* Blue color for questions */
+}
+
+.faq-answer {
+    font-size: 1.2em; /* Size for answer text */
+    margin-top: 10px; /* Space above answers */
+    color: #000000; /* White text for better contrast */
+    font-weight: bold;
+}
+
+
+hr {
+    border: none; /* Remove default border */
+    height: 10px; /* Set thickness */
+    background-color: #000; /* Set color */
+    margin-top: -20px; /* Adjust spacing around the line */
+    
+}
+
+/* FAQ ================================================================= */
+
+.footer {
+    text-align: center; /* Center text */
+    margin-top: 20px;
+}
+
+
+
+/* END OF PAGE 1 */
+/* END OF PAGE 1 */
+/* END OF PAGE 1 */
+
+
+/* SIGN IN FORM =================================================================*/
+.signin-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+.signin-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.signin-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.signin-button:hover {
+    background-color: #45a049;
+}
+.signin-select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+/*HANDLER*/
+/*
+[data-testid="stAppViewContainer"] {
+    background-color: #f8f9fa;
+}
+*/
+
+/*
+[data-testid="stAppViewContainer"] {
+    background:  #f7f7f7;
+}
+*/
+
+/*
+[data-testid="stAppViewBlockContainer"] {
+    background-image: url('https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/delicious-coffee-beans-arrangement.jpg');
+}
+*/
+
+
+[data-testid="stHeader"] {
+    background-color: #fecc09;
+}
+
+
+[data-testid="stSidebar"] {
+    position: relative;
+    overflow: hidden;
+}
+
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/view-3d-roasted-coffee-beans.jpg");
+    background-size: cover;
+    background-position: 65% center;
+    transform: rotate(180deg); /* Rotate the image 180 degrees clockwise */
+    z-index: -1; /* Ensure the pseudo-element is behind the content */
+}
+
+
+/*
+[data-testid="stSidebarHeader"] {
+    background-image: url("https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/view-3d-roasted-coffee-beans.jpg");
+    background-size: cover;
+}
+*/
+
+/* ================================================================= */
+>>>>>>> Stashed changes
 
 .header h1{
     text-align: center;
