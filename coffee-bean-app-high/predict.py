@@ -13,7 +13,7 @@ import tempfile
 
 # Set the working directory to the script's directory
 base_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(base_dir, 'best.pt')
+model_path = os.path.join(base_dir, 'best-nano.pt')
 css_path = os.path.join(base_dir, 'style.css')
 html_path = os.path.join(base_dir, 'predict.html')
 
