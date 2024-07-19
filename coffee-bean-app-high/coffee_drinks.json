@@ -1,0 +1,82 @@
+[
+    {
+        "name": "Iced Mocha",
+        "description": "A delightful iced coffee drink with a rich chocolate flavor, combining espresso, milk, and chocolate syrup for a sweet, refreshing taste."
+    },
+    {
+        "name": "Cold Brew Coffee",
+        "description": "A smooth and mellow coffee brewed with cold water over an extended period, resulting in a less acidic and more mellow flavor."
+    },
+    {
+        "name": "Affogato",
+        "description": "A delectable dessert made by pouring a shot of hot espresso over a scoop of vanilla ice cream, blending hot and cold for a delightful treat."
+    },
+    {
+        "name": "Espresso con Panna",
+        "description": "A simple yet indulgent espresso topped with a dollop of whipped cream, adding a creamy texture to the strong coffee flavor."
+    },
+    {
+        "name": "Frappe",
+        "description": "A popular Greek iced coffee made from instant coffee, sugar, and water, blended to a frothy texture for a cool, refreshing beverage."
+    },
+    {
+        "name": "Espresso Macchiato",
+        "description": "A bold shot of espresso lightly topped with a small amount of steamed milk, allowing the strong coffee flavor to shine through."
+    },
+    {
+        "name": "Ristretto",
+        "description": "A more concentrated version of espresso with a shorter extraction time, providing a stronger, more intense coffee flavor."
+    },
+    {
+        "name": "Double Espresso",
+        "description": "Two shots of espresso combined for a stronger, bolder coffee experience, perfect for those needing an extra boost."
+    },
+    {
+        "name": "Lungo",
+        "description": "A longer extraction of espresso with more water, resulting in a milder and more diluted flavor compared to a standard espresso."
+    },
+    {
+        "name": "Iced Latte",
+        "description": "A chilled beverage made with cold milk and espresso over ice, offering a smooth and creamy coffee experience."
+    },
+    {
+        "name": "Freakshake",
+        "description": "An extravagant milkshake topped with various sweets and sometimes espresso, combining dessert with a coffee kick."
+    },
+    {
+        "name": "Latte Macchiato",
+        "description": "Steamed milk with a small shot of espresso, creating a balanced coffee flavor with a creamy texture."
+    },
+    {
+        "name": "Caffe Mocha",
+        "description": "A latte enhanced with chocolate syrup and topped with whipped cream, blending rich coffee with sweet chocolate."
+    },
+    {
+        "name": "Espresso",
+        "description": "A concentrated coffee brewed by forcing hot water through finely-ground coffee, producing a strong, intense flavor."
+    },
+    {
+        "name": "Cafe au Lait",
+        "description": "Coffee combined with steamed milk, offering a smooth and creamy coffee experience similar to a latte but with a different brewing method."
+    },
+    {
+        "name": "Cappuccino",
+        "description": "A classic coffee drink consisting of equal parts espresso, steamed milk, and milk foam, creating a balanced and frothy coffee experience."
+    },
+    {
+        "name": "Flat White",
+        "description": "A variation of a latte with a higher ratio of coffee to milk, resulting in a stronger coffee flavor with a velvety texture."
+    },
+    {
+        "name": "Caffe Latte",
+        "description": "A popular coffee drink made with espresso and steamed milk, offering a smooth and creamy coffee experience."
+    },
+    {
+        "name": "Irish Coffee",
+        "description": "A unique coffee drink combining hot coffee with Irish whiskey and cream, providing a warming and slightly alcoholic coffee experience."
+    },
+    {
+        "name": "Americano",
+        "description": "Espresso diluted with hot water, resulting in a lighter, less intense coffee similar to drip coffee but with the espresso base."
+    }
+]
