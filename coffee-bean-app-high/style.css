@@ -335,8 +335,22 @@ hr {
 
 
 [data-testid="stSidebar"] {
-    background-image: url("https://images.unsplash.com/photo-1501426026826-31c667bdf23d");
+    position: relative;
+    overflow: hidden;
+}
+
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/view-3d-roasted-coffee-beans.jpg");
     background-size: cover;
+    background-position: 65% center;
+    transform: rotate(180deg); /* Rotate the image 180 degrees clockwise */
+    z-index: -1; /* Ensure the pseudo-element is behind the content */
 }
 
 
