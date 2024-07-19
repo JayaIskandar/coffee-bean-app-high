@@ -101,21 +101,28 @@ class VideoTransformer(VideoTransformerBase):
         img = frame.to_ndarray(format="bgr24")
 
         results = detect_objects(img)
+        best_result = None
+        max_confidence = 0
+
         if results[0].boxes.data.tolist():  # Check if any objects were detected
             for result in results[0].boxes.data.tolist():
                 confidence = result[4]  # Confidence score
-                if confidence > 0.6:  # Adjust threshold as needed
-                    class_name = self.model.names[int(result[5])]
-                    x1, y1, x2, y2 = int(result[0]), int(result[1]), int(result[2]), int(result[3])  # Bounding box coordinates
+                if confidence > max_confidence:
+                    max_confidence = confidence
+                    best_result = result
 
-                    # Draw bounding box and label on the image
-                    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
-                    label = f"{class_name} {confidence:.2f}"  # Label with class name and confidence score
-                    cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
+        if best_result and max_confidence > 0.6:  # Adjust threshold as needed
+            class_id = int(best_result[5])
+            class_name = self.model.names[class_id]
+            x1, y1, x2, y2 = map(int, best_result[:4])
+
+            # Draw bounding box and label on the image
+            cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
+            label = f"{class_name} {max_confidence:.2f}"  # Label with class name and confidence score
+            cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
 
         return img
 
-#################### FOR CREATING THE CONTENT OF PDF FILE ##################################
 def create_pdf(test_input_path, test_output_path, predicted_class, confidence):
     class PDF(FPDF):
         def header(self):
@@ -131,10 +138,8 @@ def create_pdf(test_input_path, test_output_path, predicted_class, confidence):
             self.set_font("Arial", 'I', size=8)
             self.multi_cell(0, 10, "Disclaimer: This prediction is based on machine learning models and may not be 100% accurate.", align='C')
         
-        
     pdf = PDF()
     pdf.add_page()
-
 
     # Title
     pdf.set_font("Arial", 'B', size=24)
@@ -173,14 +178,11 @@ def create_pdf(test_input_path, test_output_path, predicted_class, confidence):
     pdf.cell(0, 10, "Jaya Iskandar", ln=True, align='R')
     pdf.cell(0, 10, "Founder of BeanXpert", ln=True, align='R')
 
-
     # Save the PDF to a file
     pdf_file = os.path.join(base_dir, 'prediction_result.pdf')
     pdf.output(pdf_file)
 
     return pdf_file
-#################### FOR CREATING THE CONTENT OF PDF FILE ##################################
-
 
 def show_predict_page():
     st.markdown("<div class='upload-section'>Upload an image</div>", unsafe_allow_html=True)
@@ -197,38 +199,32 @@ def show_predict_page():
         is_coffee_bean = False
         max_confidence = 0.0
         predicted_class = None
+        best_result = None
 
         if results[0].boxes.data.tolist():  # Check if any objects were detected
             for result in results[0].boxes.data.tolist():
                 confidence = result[4]  # Confidence score
-                class_id = int(result[5])
                 if confidence > max_confidence:
                     max_confidence = confidence
-                    predicted_class = model.names[class_id]
+                    best_result = result
 
-            if max_confidence >= CONFIDENCE_THRESHOLD:
-                is_coffee_bean = True
+        if best_result and max_confidence >= CONFIDENCE_THRESHOLD:
+            is_coffee_bean = True
+            class_id = int(best_result[5])
+            predicted_class = model.names[class_id]
 
         if is_coffee_bean:
             st.success("Done!")
             st.write(f"This is a {predicted_class} coffee bean.")
 
-            # Process the detection results
-            for result in results[0].boxes.data.tolist():
-                class_name = model.names[int(result[5])]
-                confidence = result[4]  # Confidence score
-                x1, y1, x2, y2 = int(result[0]), int(result[1]), int(result[2]), int(result[3])  # Bounding box coordinates
+            # Draw bounding box and label on the image
+            x1, y1, x2, y2 = map(int, best_result[:4])
+            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
+            label = f"{predicted_class} {max_confidence:.2f}"  # Label with class name and confidence score
+            cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
 
-                # Draw bounding box and label on the image
-                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Draw bounding box
-                label = f"{class_name} {confidence:.2f}"  # Label with class name and confidence score
-                cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (36, 255, 12), 2)  # Draw label
+            st.image(image, caption='Detected Object', width=300)  # Display the image with bounding box and label
 
-            st.image(image, caption='Detected Objects', width=300)  # Display the image with bounding boxes and labels
-
-
-            ############ FOR PROCESSING INTO THE PDF FILE ##################
-            
             # Save the images to temporary files
             input_image = Image.open(uploaded_file)
             if input_image.mode == 'RGBA':
@@ -239,7 +235,6 @@ def show_predict_page():
             output_image_tempfile = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
             output_image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))  # Convert image back to PIL format
             output_image.save(output_image_tempfile.name)
-            
             
             # Create and download the PDF
             pdf_file = create_pdf(input_image_tempfile.name, output_image_tempfile.name, predicted_class, max_confidence)
@@ -266,10 +261,6 @@ def show_predict_page():
                         file_name="prediction_result.pdf",
                         mime="application/pdf"
                     )
-                
-            ############ FOR PROCESSING INTO THE PDF FILE ##################
-            
-            
             
         else:
             st.warning("This is not a coffee bean image.")
