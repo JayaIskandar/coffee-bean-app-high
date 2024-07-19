@@ -31,7 +31,7 @@ def load_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 def reset_game_state():
-    st.session_state.lives = 2
+    st.session_state.lives = 5
     st.session_state.score = 0
     st.session_state.level = "easy"
     st.session_state.question_index = 0
@@ -66,7 +66,7 @@ def get_leaderboard():
 
 # Function to display the leaderboard
 def show_leaderboard():
-    st.title("Leaderboard")
+    st.title("Live Leaderboard")
     leaderboard = get_leaderboard()
     leaderboard_html = "<div class='leaderboard-card'>"
     for idx, entry in enumerate(leaderboard):
@@ -133,7 +133,7 @@ def show_game_page():
 
                 # Display hearts for lives
                 st.markdown(
-                    f"<p class='hearts'>{'❤️' * lives} {'🤍' * (2 - lives)}</p>", 
+                    f"<p class='hearts'>{'❤️' * lives} {'🤍' * (5 - lives)}</p>", 
                     unsafe_allow_html=True
                 )
 

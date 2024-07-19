@@ -244,7 +244,7 @@ def show_predict_page():
             # Create and download the PDF
             pdf_file = create_pdf(input_image_tempfile.name, output_image_tempfile.name, predicted_class, max_confidence)
             # Create two columns
-            col1, col2 = st.columns([1, 10])  # Adjust the ratio as needed
+            col1, col2 = st.columns([1, 15])  # Adjust the ratio as needed
 
             with col1:
                 # Display the PDF icon
@@ -274,7 +274,7 @@ def show_predict_page():
         else:
             st.warning("This is not a coffee bean image.")
 
-    st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<br><hr>", unsafe_allow_html=True)
     st.markdown("<div class='upload-section'>Or use the camera...</div>", unsafe_allow_html=True)
 
     STUN_SERVER = "stun.l.google.com:19302"

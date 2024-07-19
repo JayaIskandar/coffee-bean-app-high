@@ -13,6 +13,13 @@ import os
 # Define base directory where HTML files are located
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
+
+# Load custom CSS
+def load_css(file_path):
+    with open(file_path) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+        
+        
 # Function to read content from a text file
 def load_blog_content(filename):
     # Replace 'your_directory' with the actual directory where your files are stored
@@ -23,6 +30,8 @@ def load_blog_content(filename):
 
     
 def show_edu_blog_page():
+    
+    load_css("style.css")
     
     # Initialize session state for blog viewing
     if 'viewing_blog' not in st.session_state:
@@ -63,11 +72,11 @@ def show_edu_blog_page():
         for i, blog in enumerate(blogs):
             st.markdown(
                 f"""
-                <div style="border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 10px;">
+                <div class="card">
                     <h3>{blog['title']}</h3>
                     <p>{blog['excerpt']}</p>
-                    <a href="?{urlencode({'blog': i, 'authenticated': 'true', 'page': 'edu_blog'})}", target="_self">
-                        <button>Read More</button>
+                    <a href="?{urlencode({'blog': i, 'authenticated': 'true', 'page': 'edu_blog'})}", target="_blank">
+                        <button class="read-more-button">Read More</button>
                     </a>
                 </div>
                 """, unsafe_allow_html=True
@@ -89,6 +98,7 @@ def show_edu_blog_page():
             
             
             # Add rating form
+            st.markdown("<br>", unsafe_allow_html=True)
             st.write("---")
             st.subheader("Rate this article")
             with st.form(key="rating_form"):
@@ -112,11 +122,7 @@ def show_edu_blog_page():
                     }
                     feedback_ref.set(feedback_data)
                     st.success(f"Thank you for your rating of {stars} stars and your comment!")
-            else:
-                    st.error("Please log in to submit feedback.")
-            
-            
-            
+    
             if st.button("Back to Home"):
                 st.session_state.viewing_blog = None
                 st.query_params.clear()

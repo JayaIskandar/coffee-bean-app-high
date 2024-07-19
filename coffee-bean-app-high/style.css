@@ -193,6 +193,14 @@ html, body {
     justify-content: center;
 }
 
+.features-title-slogan {
+    font-size: 3.5em;
+    margin-top: -40px;
+    margin-bottom: 40px;
+    width: 100%; 
+    font-weight: bold;
+}
+
 .features-title {
     font-size: 2.5em;
     margin-bottom: 20px;
@@ -499,6 +507,50 @@ iframe[src*="streamlit_option_menu.option_menu"] {
 
 
 /* ================================================================= */
+/* EDU.PY */
+/* Add your CSS styles here */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #333;
+}
+
+.card p {
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #666;
+}
+
+.read-more-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.read-more-button:hover {
+    background-color: #0056b3;
+}
+
+
+/* ================================================================= */
 /* WHEEL.PY */
 /* Add your CSS styles here */
 .wheel-container {
@@ -622,6 +674,14 @@ iframe[src*="streamlit_option_menu.option_menu"] {
     .parallax {
         width: 425px;
         background-position: 65% center;
+    }
+
+    .features-title-slogan {
+        font-size: 2.5em;
+        margin-top: -40px;
+        margin-bottom: 40px;
+        width: 100%; 
+        font-weight: bold;
     }
 
     .card-title{
