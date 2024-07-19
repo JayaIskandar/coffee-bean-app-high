@@ -183,7 +183,7 @@ def create_pdf(test_input_path, test_output_path, predicted_class, confidence):
 
 
 def show_predict_page():
-    st.markdown("<div class='upload-section'>Upload an image or use the webcam...</div>", unsafe_allow_html=True)
+    st.markdown("<div class='upload-section'>Upload an image</div>", unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
@@ -275,7 +275,7 @@ def show_predict_page():
             st.warning("This is not a coffee bean image.")
 
     st.markdown("<hr>", unsafe_allow_html=True)
-    st.markdown("<div class='upload-section'>Or use the webcam...</div>", unsafe_allow_html=True)
+    st.markdown("<div class='upload-section'>Or use the camera...</div>", unsafe_allow_html=True)
 
     STUN_SERVER = "stun.l.google.com:19302"
     RTC_CONFIGURATION = RTCConfiguration(

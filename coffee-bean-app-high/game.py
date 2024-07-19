@@ -125,8 +125,11 @@ def show_game_page():
             if question_index < len(current_questions) and lives > 0:
                 q = current_questions[question_index]
 
-                st.write(f"**Current Level: {level.capitalize()}**")
-                st.write(f"**Question: {question_index + 1}/{len(current_questions)}**")
+                # Displaying current level and question with larger font size
+                st.markdown(f"""
+                    <p style='font-size: 1.2rem; font-weight: bold;'>Current Level: &nbsp;{level.upper()}</p>
+                    <p style='font-size: 1.2rem; font-weight: bold;'>Question: &nbsp;{question_index + 1}/{len(current_questions)}</p>
+                """, unsafe_allow_html=True)
 
                 # Display hearts for lives
                 st.markdown(
@@ -137,12 +140,19 @@ def show_game_page():
                 st.markdown(
                     f"""
                     <div class="question-container">
-                        <p>{q["question"]}</p>
+                        <p class="question-text">{q["question"]}</p>
                     </div>
                     """, unsafe_allow_html=True
                 )
 
-                answer = st.radio("Choose your answer:", q["options"], key=f"q{question_index}")
+                # Display bold text with inline CSS
+                st.markdown("""
+                    <p style='font-weight: bold; font-size: 1.2rem; margin-top:20px; margin-bottom: -10px;'>Choose your answer:</p>
+                """, unsafe_allow_html=True)
+
+                
+                # Radio button widget
+                answer = st.radio("", q["options"], key=f"q{question_index}")
 
                 if st.button("Submit Answer", key=f"submit{question_index}"):
                     if answer == q["answer"]:
@@ -178,8 +188,12 @@ def show_game_page():
                 ################# IF LOSE THE GAME #####################
                 total_time = (datetime.now() - st.session_state.start_time).total_seconds()
                 save_score_to_firestore(st.session_state.nickname, score, total_time)
-                st.write(f"Game Over! Your final score is: {score}")
-                st.write(f"Time taken: {total_time:.1f} seconds")
+                # Display the final score and time taken with larger font
+                st.markdown(f"""
+                    <p style='font-size: 1.5rem; font-weight: bold;'>Game Over!</p>
+                    <p style='font-size: 1.5rem; font-weight: bold;'>Your final score is: {score}</p>
+                    <p style='font-size: 1.5rem; font-weight: bold;'>Time taken: {total_time:.1f} seconds</p>
+                """, unsafe_allow_html=True)
                 st.snow()
                 show_leaderboard()
                 
@@ -191,7 +205,7 @@ def show_game_page():
                     st.markdown(
                         f"""
                         <div>
-                            <h4>Share your achievement!</h4>
+                            <h3>Share your achievement!</h3>
                             <a href="{whatsapp_link}" target="_blank" class="social-button">
                                 <img src="data:image/png;base64,{wa_icon_base64}" alt="WhatsApp" width="20" height="20">
                                 Share on WhatsApp
@@ -208,8 +222,12 @@ def show_game_page():
             ################# IF WIN THE GAME #####################
             total_time = (datetime.now() - st.session_state.start_time).total_seconds()
             save_score_to_firestore(st.session_state.nickname, score, total_time)
-            st.write(f"Congratulations! You've completed all levels. Your final score is: {score}")
-            st.write(f"Time taken: {total_time:.1f} seconds")
+            # Display the final score and time taken with larger font
+            st.markdown(f"""
+                <p style='font-size: 1.5rem; font-weight: bold;'>Congratulations!</p>
+                <p style='font-size: 1.5rem; font-weight: bold;'>Your final score is: {score}</p>
+                <p style='font-size: 1.5rem; font-weight: bold;'>Time taken: {total_time:.1f} seconds</p>
+            """, unsafe_allow_html=True)
             st.balloons()
             show_leaderboard()
             st.session_state.game_started = False
