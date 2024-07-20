@@ -290,7 +290,7 @@ def handle_logout():
         redirect_url = "https://coffee-bean-app-high-v1.streamlit.app/"
     
     # Open the redirect URL in a new browser tab
-    webbrowser.open(redirect_url, new=1)
+    webbrowser.open_new_tab(redirect_url)
     
     # Stop further processing to ensure the user is redirected
     st.stop()
