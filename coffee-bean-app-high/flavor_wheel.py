@@ -25,6 +25,7 @@ def spin_the_wheel():
     coffee_drinks = read_json(json_path)
     drinks = json.dumps([drink['name'] for drink in coffee_drinks])
     descriptions = json.dumps([drink['description'] for drink in coffee_drinks])
+    images = json.dumps([drink['image'] for drink in coffee_drinks])
 
     # Read CSS and JS files
     css_content = read_file(css_path)
@@ -42,9 +43,11 @@ def spin_the_wheel():
     <script>
         const drinks = {drinks};
         const descriptions = {descriptions};
+        const images = {images};
         {js_content}
     </script>
     """
+
 
 # Streamlit UI
 def show_coffee_wheel_page():

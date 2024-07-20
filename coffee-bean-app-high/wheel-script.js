@@ -82,7 +82,7 @@ function spinWheel() {
             drawWheel((currentAngle % 360) * Math.PI / 180, resultIndex);
 
             const resultElement = document.getElementById('result');
-            resultElement.innerHTML = `<strong>You got:</strong> ${drinks[resultIndex]}<br><br>${descriptions[resultIndex]}`;
+            resultElement.innerHTML = `<strong>You got:</strong> ${drinks[resultIndex]}<br><br><img src="${images[resultIndex]}" alt="${drinks[resultIndex]}" style="width: 300px; border-radius: 40px; max-width: 100%;"><br><br>${descriptions[resultIndex]}`;
             spinning = false;
         }
     }

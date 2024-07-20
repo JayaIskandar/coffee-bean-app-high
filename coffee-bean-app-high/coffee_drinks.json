@@ -1,82 +1,102 @@
 [
     {
         "name": "Iced Mocha",
-        "description": "A delightful iced coffee drink with a rich chocolate flavor, combining espresso, milk, and chocolate syrup for a sweet, refreshing taste."
+        "description": "A delightful iced coffee drink with a rich chocolate flavor, combining espresso, milk, and chocolate syrup for a sweet, refreshing taste.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/iced-mocha-2.png"
     },
     {
         "name": "Cold Brew Coffee",
-        "description": "A smooth and mellow coffee brewed with cold water over an extended period, resulting in a less acidic and more mellow flavor."
+        "description": "A smooth and mellow coffee brewed with cold water over an extended period, resulting in a less acidic and more mellow flavor.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/cold-brew.png"
     },
     {
         "name": "Affogato",
-        "description": "A delectable dessert made by pouring a shot of hot espresso over a scoop of vanilla ice cream, blending hot and cold for a delightful treat."
+        "description": "A delectable dessert made by pouring a shot of hot espresso over a scoop of vanilla ice cream, blending hot and cold for a delightful treat.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/affogato.png"
     },
     {
         "name": "Espresso con Panna",
-        "description": "A simple yet indulgent espresso topped with a dollop of whipped cream, adding a creamy texture to the strong coffee flavor."
+        "description": "A simple yet indulgent espresso topped with a dollop of whipped cream, adding a creamy texture to the strong coffee flavor.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/espresso-con-panna.png"
     },
     {
         "name": "Frappe",
-        "description": "A popular Greek iced coffee made from instant coffee, sugar, and water, blended to a frothy texture for a cool, refreshing beverage."
+        "description": "A popular Greek iced coffee made from instant coffee, sugar, and water, blended to a frothy texture for a cool, refreshing beverage.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/frappe.png"
     },
     {
         "name": "Espresso Macchiato",
-        "description": "A bold shot of espresso lightly topped with a small amount of steamed milk, allowing the strong coffee flavor to shine through."
+        "description": "A bold shot of espresso lightly topped with a small amount of steamed milk, allowing the strong coffee flavor to shine through.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/espresso-machiato.jpg"
     },
     {
         "name": "Ristretto",
-        "description": "A more concentrated version of espresso with a shorter extraction time, providing a stronger, more intense coffee flavor."
+        "description": "A more concentrated version of espresso with a shorter extraction time, providing a stronger, more intense coffee flavor.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/ristretto.jpg"
     },
     {
         "name": "Double Espresso",
-        "description": "Two shots of espresso combined for a stronger, bolder coffee experience, perfect for those needing an extra boost."
+        "description": "Two shots of espresso combined for a stronger, bolder coffee experience, perfect for those needing an extra boost.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/double-expresso.jpg"
     },
     {
         "name": "Lungo",
-        "description": "A longer extraction of espresso with more water, resulting in a milder and more diluted flavor compared to a standard espresso."
+        "description": "A longer extraction of espresso with more water, resulting in a milder and more diluted flavor compared to a standard espresso.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/lungo.jpg"
     },
     {
         "name": "Iced Latte",
-        "description": "A chilled beverage made with cold milk and espresso over ice, offering a smooth and creamy coffee experience."
+        "description": "A chilled beverage made with cold milk and espresso over ice, offering a smooth and creamy coffee experience.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/iced-latte.png"
     },
     {
         "name": "Freakshake",
-        "description": "An extravagant milkshake topped with various sweets and sometimes espresso, combining dessert with a coffee kick."
+        "description": "An extravagant milkshake topped with various sweets and sometimes espresso, combining dessert with a coffee kick.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/freakshake.png"
     },
     {
         "name": "Latte Macchiato",
-        "description": "Steamed milk with a small shot of espresso, creating a balanced coffee flavor with a creamy texture."
+        "description": "Steamed milk with a small shot of espresso, creating a balanced coffee flavor with a creamy texture.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/latte-machiato.png"
     },
     {
         "name": "Caffe Mocha",
-        "description": "A latte enhanced with chocolate syrup and topped with whipped cream, blending rich coffee with sweet chocolate."
+        "description": "A latte enhanced with chocolate syrup and topped with whipped cream, blending rich coffee with sweet chocolate.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/caffe-mocha.png"
     },
     {
         "name": "Espresso",
-        "description": "A concentrated coffee brewed by forcing hot water through finely-ground coffee, producing a strong, intense flavor."
+        "description": "A concentrated coffee brewed by forcing hot water through finely-ground coffee, producing a strong, intense flavor.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/espresso.jpg"
     },
     {
         "name": "Cafe au Lait",
-        "description": "Coffee combined with steamed milk, offering a smooth and creamy coffee experience similar to a latte but with a different brewing method."
+        "description": "Coffee combined with steamed milk, offering a smooth and creamy coffee experience similar to a latte but with a different brewing method.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/cafe-au-lait.jpg"
     },
     {
         "name": "Cappuccino",
-        "description": "A classic coffee drink consisting of equal parts espresso, steamed milk, and milk foam, creating a balanced and frothy coffee experience."
+        "description": "A classic coffee drink consisting of equal parts espresso, steamed milk, and milk foam, creating a balanced and frothy coffee experience.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/cappucino.png"
     },
     {
         "name": "Flat White",
-        "description": "A variation of a latte with a higher ratio of coffee to milk, resulting in a stronger coffee flavor with a velvety texture."
+        "description": "A variation of a latte with a higher ratio of coffee to milk, resulting in a stronger coffee flavor with a velvety texture.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/flat-white.jpg"
     },
     {
         "name": "Caffe Latte",
-        "description": "A popular coffee drink made with espresso and steamed milk, offering a smooth and creamy coffee experience."
+        "description": "A popular coffee drink made with espresso and steamed milk, offering a smooth and creamy coffee experience.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/caffe-latte.png"
     },
     {
         "name": "Irish Coffee",
-        "description": "A unique coffee drink combining hot coffee with Irish whiskey and cream, providing a warming and slightly alcoholic coffee experience."
+        "description": "A unique coffee drink combining hot coffee with Irish whiskey and cream, providing a warming and slightly alcoholic coffee experience.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/irish-coffee.jpg"
     },
     {
         "name": "Americano",
-        "description": "Espresso diluted with hot water, resulting in a lighter, less intense coffee similar to drip coffee but with the espresso base."
+        "description": "Espresso diluted with hot water, resulting in a lighter, less intense coffee similar to drip coffee but with the espresso base.",
+        "image": "https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/americano.png"
     }
 ]
