@@ -13,7 +13,6 @@ import os
 # Define base directory where HTML files are located
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
-
 # Load custom CSS
 def load_css(file_path):
     with open(file_path) as f:
@@ -31,7 +30,8 @@ def load_blog_content(filename):
     
 def show_edu_blog_page():
     
-    load_css("style.css")
+    css_path = os.path.join(os.path.dirname(__file__), 'style.css')
+    load_css(css_path)  # Load CSS
     
     # Initialize session state for blog viewing
     if 'viewing_blog' not in st.session_state:
