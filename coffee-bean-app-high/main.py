@@ -127,7 +127,11 @@ def exchange_code_for_token(code):
     st.session_state["user_id"] = firebase_user.uid
     st.session_state["authenticated"] = True
     
+    print(f"User UID set in exchange_code_for_token: {firebase_user.uid}")
     
+    # Set the session state here
+    st.session_state["user"] = firebase_user.uid
+    st.session_state["authenticated"] = True
     
     return {
         "uid": firebase_user.uid,
@@ -179,18 +183,29 @@ def show_sign_in_page():
                     f'Sign in with Google</a></div>', unsafe_allow_html=True)
 
         # Check if the user has returned from Google authentication
+        # Check if the user has returned from Google authentication
         code = st.query_params.get("code")
         if code:
             try:
                 # Exchange the code for a token and get user info
                 user_info = exchange_code_for_token(code)
-                #st.session_state["user_id"] = user_info["uid"]
-                #st.session_state["authenticated"] = True
-                st.query_params.clear()
-                st.query_params["authenticated"] = "true"
-                st.rerun()
+                if user_info and user_info.get("success"):
+                    # Session state is already set in exchange_code_for_token
+                    print(f"User UID stored in session state (Google): {st.session_state['user']}")  # Debug print
+                    st.query_params.clear()
+                    st.query_params(authenticated="true")
+                    st.rerun()
+                else:
+                    st.error("Failed to get user information from Google sign-in")
             except Exception as e:
                 st.error(f"Failed to authenticate with Google: {str(e)}")
+
+        # Add this debug print at the end of the function
+        if "user" in st.session_state:
+            print(f"Current user in session state: {st.session_state['user']}")
+            st.write(f"Logged in as: {user_info['email']}")
+        else:
+            print("No user in session state")
     else:
         st.error("Google Client ID not found. Please set the GOOGLE_CLIENT_ID environment variable.")
 

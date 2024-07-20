@@ -53,9 +53,13 @@ def show_my_account_page():
                 success = delete_user_account(user_id)
                 if success:
                     st.success("Account deleted successfully.")
-                    # Clear the session state and redirect to login or home page
+                    
+                    # Using meta refresh tag for redirection
+                    st.markdown('<meta http-equiv="refresh" content="0; url=https://coffee-bean-app-high-v1.streamlit.app/">', unsafe_allow_html=True)
+                    # Clear the session state
                     st.session_state.clear()
-                    st.experimental_rerun()
+                    # Redirect using Streamlit's session state method
+                    st.rerun()
                 else:
                     st.error("Failed to delete account.")
             else:
