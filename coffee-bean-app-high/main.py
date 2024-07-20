@@ -163,7 +163,6 @@ def show_sign_in_page():
         else:
             st.error("Failed to sign in. Please check your credentials and try again.")
     
-    
     # Horizontal line with spacing
     st.markdown("<hr style='margin: 20px 0;'>", unsafe_allow_html=True)
     
@@ -181,10 +180,10 @@ def show_sign_in_page():
                     f'<a href="{sign_in_url}" style="display: inline-block; padding: 10px 20px; color: white; background-color: #4285F4; border-radius: 5px; text-decoration: none; margin-top: 20px; margin-right:20px; font-weight: bold;">'
                     f'<img src="https://raw.githubusercontent.com/JayaIskandar/beanxpert-stock-img/main/icons8-google-48.png" style="vertical-align: middle; margin-right: 8px;" width="24" height="24">'
                     f'Sign in with Google</a></div>', unsafe_allow_html=True)
-
-        # Check if the user has returned from Google authentication
+        
         # Check if the user has returned from Google authentication
         code = st.query_params.get("code")
+        user_info = None  # Initialize user_info with a default value
         if code:
             try:
                 # Exchange the code for a token and get user info
@@ -199,11 +198,12 @@ def show_sign_in_page():
                     st.error("Failed to get user information from Google sign-in")
             except Exception as e:
                 st.error(f"Failed to authenticate with Google: {str(e)}")
-
+        
         # Add this debug print at the end of the function
         if "user" in st.session_state:
             print(f"Current user in session state: {st.session_state['user']}")
-            st.write(f"Logged in as: {user_info['email']}")
+            if user_info:  # Check if user_info is not None before accessing it
+                st.write(f"Logged in as: {user_info['email']}")
         else:
             print("No user in session state")
     else:
@@ -216,10 +216,10 @@ def show_register_page():
     password = st.text_input("Password", type="password")
     confirm_password = st.text_input("Confirm Password", type="password")
     if st.button("Register"):
-        if password == confirm_password:
+        if password == confirm_password: 
             user = create_user_with_email_password(email, password)
             if user:
-                st.success("A verification email has been sent to your email address.")
+                st.success("Account created. Please proceed to sign-in!")
             else:
                 st.error("Failed to create user. Please try again.")
 
