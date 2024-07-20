@@ -289,8 +289,11 @@ def handle_logout():
     else:
         redirect_url = "https://coffee-bean-app-high-v1.streamlit.app/"
     
-    # Open the redirect URL in a new browser tab
-    webbrowser.open_new_tab(redirect_url)
+    # Provide a clickable link
+    st.markdown(f"""
+    <p>You have been logged out successfully. <br> Click
+    <a href="{redirect_url}" target="_blank" class="button">here</a> to be redirected to the home page & close the old tab.</p>
+    """, unsafe_allow_html=True)
     
     # Stop further processing to ensure the user is redirected
     st.stop()
